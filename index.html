@@ -119,11 +119,7 @@
   .note{margin-top:20px;border-radius:14px;padding:14px 16px;background:var(--accent-soft);font-size:14.5px;line-height:1.55;}
   .note b{display:block;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
 
-  .flash{background:var(--surface-2);border-radius:18px;padding:24px 20px;text-align:center;font-family:'Unbounded',sans-serif;font-weight:500;font-size:16.5px;line-height:1.4;min-height:104px;display:flex;align-items:center;justify-content:center;animation:pop .25s ease;}
   @keyframes pop{from{transform:translateY(8px);opacity:.3}to{transform:none;opacity:1}}
-  .choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:14px;}
-  .choices .opt{text-align:center;font-weight:800;padding:15px 10px;}
-  .count{font-size:12.5px;color:var(--soft);font-weight:700;margin-bottom:10px;}
 
   .slots{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
   .slot{display:flex;gap:12px;align-items:center;min-height:46px;padding:9px 14px;border-radius:12px;border:1.5px dashed var(--line);font-size:14.5px;font-weight:600;}
@@ -178,11 +174,7 @@
   @keyframes fall{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--dx),110vh) rotate(540deg);opacity:.9}}
 
   /* arcade */
-  .btn-link{background:none;border:none;color:var(--accent);font-weight:800;font-size:13px;cursor:pointer;padding:6px 2px;}
-  .btn-link:focus-visible,.atab:focus-visible,.cell:focus-visible,.dp:focus-visible,.mcard:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px;}
-  .atabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:14px;}
-  .atab{flex:none;padding:9px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-weight:800;font-size:13px;cursor:pointer;}
-  .atab.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
+  .cell:focus-visible,.dp:focus-visible,.mcard:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px;}
   .garea{display:flex;flex-direction:column;align-items:center;}
   .ghud{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:800;margin-bottom:10px;width:100%;max-width:360px;}
   .ghud .etapa{color:var(--accent);flex:1;text-align:center;}
@@ -253,10 +245,7 @@
       <label for="in-name">Tu nombre (opcional)</label>
       <input id="in-name" type="text" autocomplete="given-name" placeholder="Para personalizar tu informe">
     </div>
-    <div class="row">
-      <button class="btn btn-primary" id="b-start">Aceptar el caso</button>
-      <button class="btn btn-ghost" id="b-arcade">🎮 Sala de juegos</button>
-    </div>
+    <div class="row"><button class="btn btn-primary" id="b-start">Aceptar el caso</button></div>
   </section>
 
   <section id="s-quiz" hidden>
@@ -268,16 +257,6 @@
   </section>
 
   <section id="s-res" hidden class="stack"></section>
-
-  <section id="s-arcade" hidden>
-    <div class="top">
-      <div class="top-row"><span>🎮 Sala de juegos · Archivo i3</span><button class="btn-link" id="arc-back">← Volver</button></div>
-    </div>
-    <div class="card">
-      <div class="atabs" id="arc-tabs" role="tablist"></div>
-      <div class="garea" id="arc-body"></div>
-    </div>
-  </section>
 
 </div>
 
@@ -295,16 +274,15 @@
   var TORDER = ["ord","val","eli","cfis","cdig"];
 
   var Q = [
-    {t:"cards", k:"ord", stage:"Ordenación", game:"Elige el método", scene:"Primer recorrido del archivo: cada carpeta usa un criterio distinto. Tu trabajo es reconocer cuál.",
-     q:"¿Qué método de ordenación describe cada situación?",
-     labels:["Cronológica","Alfabética","Geográfica","Topográfica"],
-     c:[{s:"05 ene. → 12 ene. → 28 ene.", a:0},
-        {s:"Acosta → García → Rojas", a:1},
-        {s:"Bogotá → Cali → Medellín", a:2},
-        {s:"Módulo 2 / Estante 1 / Caja 5", a:3},
-        {s:"Las cartas se archivan según su fecha de recepción", a:0},
-        {s:"Los expedientes de clientes van por razón social", a:1}],
-     note:"Elige el criterio según la información que necesitas recuperar: fecha (cronológica), nombres o razón social (alfabética), territorio o sede (geográfica) y estante, módulo o caja (topográfica)."},
+    {t:"mem", k:"ord", stage:"Ordenación", game:"Parejas", scene:"Primer recorrido del archivo: cada carpeta usa un criterio distinto. Voltea las cartas y une cada método con su ejemplo.",
+     q:"Encuentra las 6 parejas: método de ordenación y ejemplo.", great:10, good:16,
+     pairs:[["Cronológica","05 ene. → 12 ene. → 28 ene."],
+            ["Numérica","Rad. 001 → 002 → 003"],
+            ["Alfabética","Acosta → García → Rojas"],
+            ["Geográfica","Bogotá → Cali → Medellín"],
+            ["Topográfica","Módulo 2 / Estante 1 / Caja 5"],
+            ["Por asuntos","Contratos / Nómina / Compras"]],
+     note:"Elige el criterio según la información que necesitas recuperar: fecha (cronológica), números consecutivos (numérica), nombres (alfabética), territorio o sede (geográfica), estante o caja (topográfica) y tema (por asuntos)."},
 
     {t:"case", k:"ord", stage:"Ordenación · Caso", scene:"En el archivo de Talento Humano, la serie «Historias laborales» (código GH-02) está ordenada por fecha en una caja, por apellido en otra y por color de carpeta en una tercera.",
      q:"¿Cuál es el problema principal?",
@@ -324,13 +302,14 @@
         ["Se conserva la secuencia natural en que se desarrolló el trámite",0]],
      note:"La ordenación dispone los documentos en una secuencia lógica, con un criterio definido y respetando el orden en que se desarrolló el trámite. Así se recupera rápido, se controlan faltantes y duplicados y se conserva el orden original."},
 
-    {t:"cards", k:"val", stage:"Valor del archivo", game:"Relaciona", scene:"El gerente pregunta: «¿para qué sirve tanto orden?». Tienes que mostrarle el valor con casos concretos.",
-     q:"¿Qué beneficio de la organización archivística muestra cada caso?",
-     labels:["Auditoría","Servicio","Memoria","Eficiencia"],
-     c:[{s:"Un ente de control pide evidencias y están disponibles y trazables", a:0},
-        {s:"Un usuario recibe respuesta oportuna a su solicitud", a:1},
-        {s:"Años después se consultan las decisiones y antecedentes de un proyecto", a:2},
-        {s:"Se ahorra tiempo buscando papeles y se libera espacio", a:3}],
+    {t:"sopa", k:"val", stage:"Valor del archivo", game:"Sopa de letras", scene:"El gerente pregunta: «¿para qué sirve tanto orden?». Tienes que darle seis razones; encuéntralas en la sopa guiándote por las pistas.",
+     q:"Encuentra los 6 beneficios de la organización archivística.", n:13,
+     words:[{w:"TRANSPARENCIA",c:"Información recuperable y controlada"},
+            {w:"CUMPLIMIENTO",c:"Apoya la aplicación de instrumentos archivísticos"},
+            {w:"AUDITORIA",c:"Evidencias disponibles y trazables"},
+            {w:"EFICIENCIA",c:"Ahorra tiempo y espacio"},
+            {w:"SERVICIO",c:"Respuestas más oportunas a los usuarios"},
+            {w:"MEMORIA",c:"Preserva decisiones y antecedentes"}],
      note:"La organización apoya la auditoría, la transparencia, el servicio, la memoria institucional, el cumplimiento y la eficiencia."},
 
     {t:"order", k:"eli", stage:"Eliminación · Proceso", game:"Ordena el procedimiento", scene:"Hay una serie cuyo tiempo de retención ya se cumplió y su disposición final es eliminación. Antes de destruir nada, hay que seguir un procedimiento.",
@@ -354,25 +333,12 @@
         ["Entregarlo así: la información ya es «invisible».",0]],
      note:"Mover a la papelera o formatear rápidamente no garantiza un borrado seguro. Si el medio no puede sanitizarse de forma confiable, la opción es destruir el dispositivo; en todos los casos se deja control y evidencia."},
 
-    {t:"pick", k:"cfis", stage:"Conservación física", game:"Encuentra los 3 riesgos", scene:"Recorrido por el depósito del archivo central. Revisa lo que ves.",
-     q:"Marca los 3 riesgos para los documentos en papel.", n:3,
-     o:[["Cajas apoyadas en el piso, junto a una tubería con filtraciones",1],
-        ["Un termohigrómetro registra temperatura y humedad, y se limpian las estanterías con regularidad",0],
-        ["Ganchos metálicos y cinta adhesiva en varios expedientes",1],
-        ["Carpetas y cajas adecuadas para archivo",0],
-        ["La luz del sol da directo sobre los folios de una estantería junto a la ventana",1],
-        ["Existe un plan de respuesta ante agua, fuego y otros riesgos",0]],
+    {t:"frog", k:"cfis", stage:"Conservación física", game:"Rana archivista", scene:"Recorrido por el depósito: fuego, humedad, plagas, roedores y hongos amenazan los documentos en papel. Tu misión es poner el documento a salvo en el archivo.",
+     q:"Llega al Archivo 🗄️ tres veces sin que los riesgos te alcancen.",
      note:"Prevenir es mejor que reparar: controla temperatura, humedad, luz y polvo; usa unidades de conservación adecuadas; evita ganchos y cintas; y vigila hongos, insectos, roedores y filtraciones."},
 
-    {t:"cards", k:"cdig", stage:"Conservación digital", game:"¿Buena práctica o riesgo?", scene:"Último hallazgo: el repositorio digital del archivo. Evalúa cada práctica.",
-     q:"¿Cada práctica protege los documentos electrónicos o los pone en riesgo?",
-     labels:["Buena práctica","Riesgo"],
-     c:[{s:"Copias de seguridad en ubicaciones separadas, con pruebas de restauración", a:0},
-        {s:"Subir todo a la nube y dar el tema por resuelto, sin política de respaldo", a:1},
-        {s:"Permisos de acceso según funciones y necesidad de uso", a:0},
-        {s:"Mantener un formato antiguo sin plan de migración", a:1},
-        {s:"Verificar la integridad de los archivos con controles técnicos", a:0},
-        {s:"Usar el mismo usuario y clave para todo el equipo", a:1}],
+    {t:"snake", k:"cdig", stage:"Conservación digital", game:"Serpiente", scene:"Último hallazgo: el repositorio digital. Las buenas prácticas protegen los documentos electrónicos; los riesgos los ponen en peligro.",
+     q:"Come 8 buenas prácticas sin tocar los riesgos ni morderte la cola.",
      note:"La conservación digital busca documentos accesibles, íntegros, auténticos y utilizables en el tiempo. La nube no reemplaza una política de conservación, respaldo y control."},
 
     {t:"case", k:null, stage:"Tu informe final", scene:"Terminaste el recorrido. Es momento de mirar hacia adentro, como analista.",
@@ -440,7 +406,7 @@
   var $ = function(id){ return document.getElementById(id); };
   var sStart=$('s-start'), sQuiz=$('s-quiz'), sRes=$('s-res'), card=$('qcard');
 
-  function show(el){ [sStart,sQuiz,sRes,$('s-arcade')].forEach(function(s){ s.hidden = s!==el; }); window.scrollTo({top:0, behavior:'auto'}); }
+  function show(el){ [sStart,sQuiz,sRes].forEach(function(s){ s.hidden = s!==el; }); window.scrollTo({top:0, behavior:'auto'}); }
   function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
   function el(tag, cls, text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!==undefined) e.textContent=text; return e; }
 
@@ -468,7 +434,9 @@
     }
   }
 
+  var stopStage = null;
   function render(){
+    if(stopStage){ stopStage(); stopStage = null; }
     var q = Q[st.idx];
     $('q-count').textContent = 'Hallazgo ' + (st.idx+1) + ' de ' + TOTAL;
     buildTrail();
@@ -480,7 +448,7 @@
     if(q.scene){ var sc = el('div','scene'); sc.appendChild(el('b',null,'Caso')); sc.appendChild(document.createTextNode(q.scene)); card.appendChild(sc); }
     card.appendChild(el('h2','q',q.q));
     var area = el('div'); card.appendChild(area);
-    ({case:caseUI, cards:cardsUI, order:orderUI, pick:pickUI})[q.t](q, area);
+    stopStage = ({case:caseUI, order:orderUI, pick:pickUI, mem:memUI, sopa:sopaUI, frog:frogUI, snake:snakeUI})[q.t](q, area) || null;
   }
 
   function award(q, pts){
@@ -538,34 +506,6 @@
       award(q, good === q.n ? 2 : (good === q.n-1 ? 1 : 0));
     });
     upd();
-  }
-
-  function cardsUI(q, area){
-    var i = 0, ok = 0;
-    var count = el('div','count'), deck = el('div'), btns = el('div','choices');
-    area.appendChild(count); area.appendChild(deck); area.appendChild(btns);
-    var order = shuffle(q.c);
-    function showCard(){
-      var c = order[i];
-      count.textContent = 'Tarjeta ' + (i+1) + ' de ' + order.length;
-      deck.innerHTML = ''; deck.appendChild(el('div','flash',c.s));
-      btns.innerHTML = '';
-      q.labels.forEach(function(txt,k){
-        var b = el('button','opt',txt);
-        b.addEventListener('click', function(){
-          if(k===c.a) ok++;
-          b.classList.add('picked');
-          Array.prototype.forEach.call(btns.children, function(x){ x.disabled = true; });
-          setTimeout(function(){
-            i++;
-            if(i<order.length) showCard();
-            else { count.textContent = 'Tarjetas completadas'; deck.innerHTML=''; btns.innerHTML=''; award(q, Math.round(2*ok/order.length)); }
-          }, 280);
-        });
-        btns.appendChild(b);
-      });
-    }
-    showCard();
   }
 
   function orderUI(q, area){
@@ -652,6 +592,7 @@
   }
 
   function finish(){
+    if(stopStage){ stopStage(); stopStage = null; }
     sRes.innerHTML = '';
     var ranked = TORDER.slice().sort(function(a,b){ return pct(a)-pct(b); });
     var weakest = ranked[0], second = ranked[1], strongest = ranked[ranked.length-1];
@@ -719,9 +660,7 @@
     var go = el('button','btn btn-primary','🎉 Sellar mi compromiso');
     var again = el('button','btn btn-ghost','Volver a analizar el archivo');
     again.addEventListener('click', function(){ resetState(); show(sStart); });
-    var play = el('button','btn btn-ghost','🎮 Sala de juegos');
-    play.addEventListener('click', function(){ openArcade('res'); });
-    row.appendChild(go); row.appendChild(play); row.appendChild(again); c4.appendChild(row);
+    row.appendChild(go); row.appendChild(again); c4.appendChild(row);
     var fb = el('div','commit-fb'); fb.hidden = true; fb.setAttribute('aria-live','polite'); c4.appendChild(fb);
     go.addEventListener('click', function(){
       var a = i1.value.trim(), b = i2.value.trim();
@@ -756,16 +695,14 @@
     });});
   }
 
-  /* ================= SALA DE JUEGOS ================= */
-  var arc = {game:'sopa', stop:null, from:'start'};
-  var snakeBest = 0, frogBest = 0;
+  /* ================= JUEGOS DENTRO DE LOS HALLAZGOS ================= */
   var EMO = '"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';
   var KEYS = {ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',W:'up',s:'down',S:'down',a:'left',A:'left',d:'right',D:'right'};
 
   function colors(){
     var cs = getComputedStyle(document.documentElement);
     function g(n){ return cs.getPropertyValue(n).trim(); }
-    return {bg:g('--surface-2'), line:g('--line'), ink:g('--ink'), acc:g('--accent'), accInk:g('--accent-ink'), accSoft:g('--accent-soft'), soft:g('--soft'), good:g('--t-val'), bad:g('--t-eli')};
+    return {bg:g('--surface-2'), line:g('--line'), acc:g('--accent'), accInk:g('--accent-ink'), accSoft:g('--accent-soft'), soft:g('--soft')};
   }
 
   function controls(canvas, onDir){
@@ -783,55 +720,61 @@
       onDir(Math.abs(dx)>Math.abs(dy) ? (dx>0?'right':'left') : (dy>0?'down':'up'));
     }, {passive:true});
     var pad = el('div','dpad');
-    [['u','▲','up'],['l','◀','left'],['d','▼','down'],['r','▶','right']].forEach(function(p){
-      var b = el('button','dp dp-'+p[0],p[1]); b.setAttribute('aria-label',p[2]);
-      b.addEventListener('pointerdown', function(e){ e.preventDefault(); onDir(p[2]); });
+    [['u','▲','arriba'],['l','◀','izquierda'],['d','▼','abajo'],['r','▶','derecha']].forEach(function(p,i){
+      var b = el('button','dp dp-'+p[0],p[1]); b.type='button'; b.setAttribute('aria-label',p[2]);
+      var dirs = ['up','left','down','right'];
+      b.addEventListener('pointerdown', function(e){ e.preventDefault(); onDir(dirs[i]); });
       pad.appendChild(b);
     });
-    return {pad:pad, off:function(){ document.removeEventListener('keydown', kd); }};
+    return {pad:pad, off:function(){ document.removeEventListener('keydown', kd); pad.hidden = true; }};
   }
 
-  function stopArc(){ if(arc.stop){ arc.stop(); arc.stop = null; } }
-
-  function pickGame(id){
-    stopArc(); arc.game = id;
-    var tabs = $('arc-tabs'); tabs.innerHTML = '';
-    GAMES.forEach(function(g){
-      var b = el('button','atab' + (g.id===id?' on':''), g.label);
-      b.setAttribute('role','tab'); b.setAttribute('aria-selected', g.id===id ? 'true':'false');
-      b.addEventListener('click', function(){ pickGame(g.id); });
-      tabs.appendChild(b);
+  /* ---------- parejas ---------- */
+  function memUI(q, area){
+    var deck = [];
+    q.pairs.forEach(function(p,i){ deck.push({id:i,t:p[0]}); deck.push({id:i,t:p[1]}); });
+    deck = shuffle(deck);
+    var wrap = el('div','garea'); area.appendChild(wrap);
+    var stat = el('div','ghud'); stat.style.maxWidth='none';
+    var sm = el('span',null,'Intentos: 0'), sp = el('span',null,'Parejas: 0 de '+q.pairs.length);
+    stat.appendChild(sm); stat.appendChild(sp);
+    var board = el('div','mem');
+    wrap.appendChild(stat); wrap.appendChild(board);
+    var open = [], lock = false, moves = 0, ok = 0;
+    deck.forEach(function(c){
+      var b = el('button','mcard'); b.type='button';
+      var inn = el('span','in'); inn.appendChild(el('span','b','i3')); inn.appendChild(el('span','f',c.t)); b.appendChild(inn);
+      b.setAttribute('aria-label','Carta boca abajo');
+      b.addEventListener('click', function(){
+        if(lock || b.classList.contains('flip') || b.classList.contains('ok')) return;
+        b.classList.add('flip'); b.setAttribute('aria-label', c.t); open.push({b:b,c:c});
+        if(open.length===2){
+          moves++; sm.textContent = 'Intentos: '+moves; lock = true;
+          var x = open[0], y = open[1];
+          if(x.c.id===y.c.id){
+            x.b.classList.add('ok'); y.b.classList.add('ok'); ok++; sp.textContent = 'Parejas: '+ok+' de '+q.pairs.length;
+            open = []; lock = false;
+            if(ok===q.pairs.length){ party(false); award(q, moves<=q.great ? 2 : (moves<=q.good ? 1 : 0)); }
+          } else {
+            setTimeout(function(){ x.b.classList.remove('flip'); y.b.classList.remove('flip'); open = []; lock = false; }, 850);
+          }
+        }
+      });
+      board.appendChild(b);
     });
-    var body = $('arc-body'); body.innerHTML = '';
-    var g = GAMES.filter(function(x){ return x.id===id; })[0];
-    arc.stop = g.fn(body) || null;
   }
-  function openArcade(from){ arc.from = from; show($('s-arcade')); pickGame(arc.game); }
-  $('arc-back').addEventListener('click', function(){ stopArc(); show(arc.from==='res' ? sRes : sStart); });
-  $('b-arcade').addEventListener('click', function(){ openArcade('start'); });
 
   /* ---------- sopa de letras ---------- */
-  function sopaGame(root){
-    var N = 12;
-    var WORDS = [
-      {w:"CONSERVACION", c:"Medidas para reducir el deterioro y prolongar la vida útil"},
-      {w:"CRONOLOGICA", c:"Método de ordenación que sigue las fechas"},
-      {w:"EXPEDIENTE", c:"Conjunto de documentos de un mismo trámite"},
-      {w:"TRITURACION", c:"Método físico que reduce el papel a fragmentos"},
-      {w:"INTEGRIDAD", c:"Que los archivos no se alteren ni se corrompan"},
-      {w:"AUDITORIA", c:"Revisión que exige evidencias disponibles y trazables"},
-      {w:"ARCHIVO", c:"Lugar donde se custodian y organizan los documentos"},
-      {w:"BACKUP", c:"Copia de seguridad, en inglés"},
-      {w:"ORDEN", c:"Lo que se conserva cuando se respeta el trámite original"}
-    ];
+  function sopaUI(q, area){
+    var N = q.n, WORDS = q.words;
     var DIRS = [[0,1],[1,0],[1,1],[-1,1]];
     function build(){
-      for(var attempt=0; attempt<80; attempt++){
+      for(var attempt=0; attempt<120; attempt++){
         var g = []; for(var i=0;i<N;i++){ g.push(new Array(N).fill('')); }
         var ok = true, list = WORDS.slice().sort(function(a,b){ return b.w.length-a.w.length; });
         for(var wi=0; wi<list.length && ok; wi++){
           var w = list[wi].w, done = false;
-          for(var t=0; t<400 && !done; t++){
+          for(var t=0; t<500 && !done; t++){
             var d = DIRS[Math.floor(Math.random()*DIRS.length)];
             var r0 = Math.floor(Math.random()*N), c0 = Math.floor(Math.random()*N);
             var r1 = r0+d[0]*(w.length-1), c1 = c0+d[1]*(w.length-1);
@@ -853,13 +796,13 @@
       return null;
     }
     var grid = build();
-    var found = {}, first = null, count = 0;
+    var found = {}, first = null, count = 0, over = false;
     var cells = [];
-    var info = el('p','ginfo','Toca la primera y la última letra de cada palabra. Pueden estar en horizontal, vertical o diagonal.');
-    var board = el('div','sopa');
+    var wrap = el('div','garea'); area.appendChild(wrap);
+    var board = el('div','sopa'); board.style.gridTemplateColumns = 'repeat('+N+',1fr)';
     var list = el('ul','wl');
-    var msg = el('div','gmsg'); msg.hidden = true;
-    root.appendChild(info); root.appendChild(board); root.appendChild(list); root.appendChild(msg);
+    wrap.appendChild(board); wrap.appendChild(list);
+    var fin = el('button','btn btn-ghost','Ya terminé'); fin.style.marginTop = '14px'; wrap.appendChild(fin);
 
     for(var r=0;r<N;r++){
       cells.push([]);
@@ -878,162 +821,65 @@
       li.appendChild(cl); li.appendChild(nb); list.appendChild(li); lis[wd.w] = {li:li, nb:nb};
     });
     function clearSel(){ if(first){ cells[first.r][first.c].classList.remove('sel'); first = null; } }
+    function shake(b){ b.classList.add('shake'); setTimeout(function(){ b.classList.remove('shake'); },260); }
+    function finish(){
+      if(over) return; over = true; clearSel();
+      Array.prototype.forEach.call(board.children, function(b){ b.disabled = true; });
+      fin.remove();
+      if(count===WORDS.length) party(false);
+      award(q, count===WORDS.length ? 2 : (count>=WORDS.length-2 ? 1 : 0));
+    }
+    fin.addEventListener('click', finish);
     function tap(r,c){
+      if(over) return;
       if(!first){ first = {r:r,c:c}; cells[r][c].classList.add('sel'); return; }
       if(first.r===r && first.c===c){ clearSel(); return; }
       var dr = r-first.r, dc = c-first.c;
-      if(!(dr===0 || dc===0 || Math.abs(dr)===Math.abs(dc))){ clearSel(); cells[r][c].classList.add('shake'); setTimeout(function(){ cells[r][c].classList.remove('shake'); },260); return; }
+      if(!(dr===0 || dc===0 || Math.abs(dr)===Math.abs(dc))){ clearSel(); shake(cells[r][c]); return; }
       var len = Math.max(Math.abs(dr),Math.abs(dc))+1, sr = Math.sign(dr), sc = Math.sign(dc), s = '', path = [];
       for(var k=0;k<len;k++){ var rr = first.r+sr*k, cc = first.c+sc*k; s += grid[rr][cc]; path.push([rr,cc]); }
       var rev = s.split('').reverse().join('');
       var hit = null;
       WORDS.forEach(function(wd){ if(!found[wd.w] && (wd.w===s || wd.w===rev)) hit = wd; });
-      var f = first; clearSel();
+      clearSel();
       if(hit){
         found[hit.w] = true; count++;
-        var hue = (count*41) % 360;
-        path.forEach(function(p){ var b = cells[p[0]][p[1]]; b.style.background = 'hsla('+hue+',70%,55%,.55)'; });
+        var hue = (count*53) % 360;
+        path.forEach(function(p){ cells[p[0]][p[1]].style.background = 'hsla('+hue+',70%,55%,.55)'; });
         lis[hit.w].li.classList.add('done'); lis[hit.w].nb.textContent = '✓ ' + hit.w;
-        if(count === WORDS.length){
-          msg.hidden = false; msg.textContent = '¡Encontraste las ' + WORDS.length + ' palabras! Eres un archivista de pies a cabeza. 🎉';
-          party(true);
-        }
-      } else {
-        var last = cells[r][c]; last.classList.add('shake'); setTimeout(function(){ last.classList.remove('shake'); },260);
-      }
+        if(count === WORDS.length) finish();
+      } else { shake(cells[r][c]); }
     }
-    var again = el('button','btn btn-ghost','Nueva sopa'); again.style.marginTop = '14px';
-    again.addEventListener('click', function(){ pickGame('sopa'); });
-    root.appendChild(again);
-    return null;
-  }
-
-  /* ---------- serpiente ---------- */
-  function snakeGame(root){
-    var N=15, C=24, W=N*C;
-    var ETAPAS = ["Producción o recepción","Distribución","Trámite","Organización","Consulta","Conservación","Disposición final"];
-    var OPP = {up:'down',down:'up',left:'right',right:'left'};
-    var VEC = {up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
-    var hud = el('div','ghud'), hs = el('span',null,'Puntos: 0'), he = el('span','etapa','Etapa: —'), hb = el('span',null,'Mejor: '+snakeBest);
-    hud.appendChild(hs); hud.appendChild(he); hud.appendChild(hb);
-    var cv = el('canvas','gcv'); cv.width = W; cv.height = W; cv.setAttribute('aria-label','Juego de la serpiente');
-    var ctx = cv.getContext('2d');
-    var ctl = controls(cv, onDir);
-    var info = el('p','ginfo','Come documentos 📄 y recorre las etapas del ciclo de vida. Evita 💧 humedad, 🔥 fuego y 🐛 plagas, y no te muerdas la cola. Usa las flechas o desliza el dedo.');
-    var rs = el('button','btn btn-ghost','Reiniciar'); rs.style.marginTop='10px';
-    rs.addEventListener('click', reset);
-    root.appendChild(hud); root.appendChild(cv); root.appendChild(ctl.pad); root.appendChild(info); root.appendChild(rs);
-    var snake, dir, queue, doc, haz, score, eaten, state, timer, delay, flash;
-
-    function free(minDist){
-      for(var t=0;t<200;t++){
-        var x = Math.floor(Math.random()*N), y = Math.floor(Math.random()*N), bad = false;
-        snake.forEach(function(s){ if(s.x===x&&s.y===y) bad = true; });
-        haz.forEach(function(h){ if(h.x===x&&h.y===y) bad = true; });
-        if(doc && doc.x===x && doc.y===y) bad = true;
-        if(minDist){ var h0 = snake[0]; if(Math.abs(h0.x-x)+Math.abs(h0.y-y) < minDist) bad = true; }
-        if(!bad) return {x:x,y:y};
-      }
-      return null;
-    }
-    function reset(){
-      clearTimeout(timer);
-      snake = [{x:7,y:7},{x:6,y:7},{x:5,y:7}]; dir='right'; queue=[]; haz=[]; doc=null;
-      score=0; eaten=0; state='ready'; delay=150; flash='';
-      doc = free(0); upd(); draw();
-    }
-    function upd(){ hs.textContent = 'Puntos: '+score; hb.textContent = 'Mejor: '+snakeBest; he.textContent = 'Etapa: ' + (flash || (eaten ? ETAPAS[(eaten-1)%7] : '—')); }
-    function onDir(d){
-      if(state==='over') return;
-      var last = queue.length ? queue[queue.length-1] : dir;
-      if(d===last || OPP[d]===last) return;
-      if(queue.length<2) queue.push(d);
-      if(state==='ready'){ state='play'; timer = setTimeout(step, delay); }
-    }
-    function step(){
-      if(state!=='play') return;
-      if(queue.length) dir = queue.shift();
-      var h = snake[0], v = VEC[dir];
-      var nx = (h.x+v[0]+N)%N, ny = (h.y+v[1]+N)%N;
-      var hit = false;
-      snake.forEach(function(s,i){ if(i<snake.length-1 && s.x===nx && s.y===ny) hit = true; });
-      haz.forEach(function(z){ if(z.x===nx && z.y===ny) hit = true; });
-      if(hit){ over(); return; }
-      snake.unshift({x:nx,y:ny});
-      if(doc && nx===doc.x && ny===doc.y){
-        eaten++; score += 10;
-        if(eaten%7===0){ score += 20; flash='¡Ciclo completo! +20'; setTimeout(function(){ flash=''; upd(); },1600); party(false); }
-        doc = free(0);
-        if(eaten%3===0 && haz.length<8){ var z = free(4); if(z){ z.e = ['💧','🔥','🐛'][Math.floor(Math.random()*3)]; haz.push(z); } }
-        delay = Math.max(75, 150-eaten*3);
-      } else { snake.pop(); }
-      upd(); draw();
-      timer = setTimeout(step, delay);
-    }
-    function over(){
-      state='over'; if(score>snakeBest) snakeBest = score; upd(); draw();
-      if(eaten>=7) party(false);
-    }
-    function emoji(ch,x,y,size){ ctx.font = size+'px '+EMO; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(ch, x*C+C/2, y*C+C/2+1); }
-    function draw(){
-      var k = colors();
-      ctx.fillStyle = k.bg; ctx.fillRect(0,0,W,W);
-      ctx.fillStyle = k.line;
-      for(var i=0;i<N;i++) for(var j=0;j<N;j++) if((i+j)%2===0) ctx.fillRect(i*C,j*C,C,C);
-      ctx.globalAlpha = .35; ctx.fillStyle = k.bg; for(var a=0;a<N;a++) for(var b=0;b<N;b++) if((a+b)%2===0) ctx.fillRect(a*C,b*C,C,C); ctx.globalAlpha = 1;
-      haz.forEach(function(z){ emoji(z.e,z.x,z.y,C*.72); });
-      if(doc) emoji('📄',doc.x,doc.y,C*.78);
-      snake.forEach(function(s,i){
-        ctx.fillStyle = k.acc; ctx.globalAlpha = i===0 ? 1 : Math.max(.45, 1 - i*.035);
-        var p=2; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(s.x*C+p,s.y*C+p,C-p*2,C-p*2,6) : ctx.rect(s.x*C+p,s.y*C+p,C-p*2,C-p*2); ctx.fill();
-        ctx.globalAlpha = 1;
-      });
-      var hd = snake[0]; ctx.fillStyle = k.accInk;
-      ctx.beginPath(); ctx.arc(hd.x*C+C*.35,hd.y*C+C*.4,2.2,0,7); ctx.arc(hd.x*C+C*.65,hd.y*C+C*.4,2.2,0,7); ctx.fill();
-      if(state!=='play'){
-        ctx.fillStyle = 'rgba(0,0,0,.5)'; ctx.fillRect(0,W/2-44,W,88);
-        ctx.fillStyle = '#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
-        ctx.font = '800 17px "Nunito Sans",sans-serif';
-        ctx.fillText(state==='over' ? 'Juego terminado: '+score+' puntos' : 'Pulsa una flecha para empezar', W/2, W/2-8);
-        ctx.font = '600 13px "Nunito Sans",sans-serif';
-        ctx.fillText(state==='over' ? 'Toca Reiniciar para jugar otra vez' : 'o desliza el dedo sobre el tablero', W/2, W/2+16);
-      }
-    }
-    reset();
-    return function(){ clearTimeout(timer); state='over'; ctl.off(); };
   }
 
   /* ---------- rana archivista ---------- */
-  function froggerGame(root){
-    var S=40, COLS=9, ROWS=10, W=S*COLS, H=S*ROWS;
+  function frogUI(q, area){
+    var S=40, COLS=9, ROWS=10, W=S*COLS, H=S*ROWS, GOAL=3;
     var LANES = [
-      {r:1,dir:1,v:1.5,e:'🔥'},{r:2,dir:-1,v:1.0,e:'💧'},{r:3,dir:1,v:2.0,e:'🐛'},
-      {r:5,dir:-1,v:1.3,e:'🐀'},{r:6,dir:1,v:1.8,e:'🍄'},{r:7,dir:-1,v:2.2,e:'💧'},{r:8,dir:1,v:1.1,e:'🔥'}
+      {r:1,dir:1,v:1.4,e:'🔥'},{r:2,dir:-1,v:1.0,e:'💧'},{r:3,dir:1,v:1.8,e:'🐛'},
+      {r:5,dir:-1,v:1.3,e:'🐀'},{r:6,dir:1,v:1.7,e:'🍄'},{r:7,dir:-1,v:2.0,e:'💧'},{r:8,dir:1,v:1.1,e:'🔥'}
     ];
-    var hud = el('div','ghud'), hv = el('span',null,'Vidas: ❤️❤️❤️'), hs = el('span','etapa','Archivados: 0'), hb = el('span',null,'Mejor: '+frogBest);
-    hud.appendChild(hv); hud.appendChild(hs); hud.appendChild(hb);
+    var wrap = el('div','garea'); area.appendChild(wrap);
+    var hud = el('div','ghud'), hv = el('span',null,'Vidas: ❤️❤️❤️'), hs = el('span','etapa','Archivados: 0 de '+GOAL);
+    hud.appendChild(hv); hud.appendChild(hs);
     var cv = el('canvas','gcv'); cv.width = W; cv.height = H; cv.style.aspectRatio = W+' / '+H; cv.setAttribute('aria-label','Juego de la rana archivista');
     var ctx = cv.getContext('2d');
     var ctl = controls(cv, onDir);
-    var info = el('p','ginfo','Lleva el documento 📄 hasta el Archivo 🗄️ esquivando los riesgos de conservación: fuego, humedad, plagas, roedores y hongos. Tienes 3 vidas.');
-    var rs = el('button','btn btn-ghost','Reiniciar'); rs.style.marginTop='10px';
-    rs.addEventListener('click', reset);
-    root.appendChild(hud); root.appendChild(cv); root.appendChild(ctl.pad); root.appendChild(info); root.appendChild(rs);
-    var objs, frog, lives, done, level, state, raf, last, hitFlash;
-
-    function reset(){
-      cancelAnimationFrame(raf);
-      objs = [];
-      LANES.forEach(function(L){
-        var n = 3, off = Math.random()*W;
-        for(var i=0;i<n;i++) objs.push({lane:L, x:(off + i*(W/n)) % W});
-      });
-      frog = {c:4, r:9}; lives = 3; done = 0; level = 1; state = 'ready'; hitFlash = 0; last = 0;
-      upd(); draw();
-    }
+    var info = el('p','ginfo','Lleva el documento 📄 al Archivo 🗄️ esquivando fuego, humedad, plagas, roedores y hongos. Usa las flechas del teclado, los botones o desliza el dedo.');
+    wrap.appendChild(hud); wrap.appendChild(cv); wrap.appendChild(ctl.pad); wrap.appendChild(info);
+    var objs = [], frog = {c:4,r:9}, lives = 3, done = 0, state = 'ready', raf = 0, last = 0, hitFlash = 0, ended = false;
+    LANES.forEach(function(L){
+      var off = Math.random()*W;
+      for(var i=0;i<3;i++) objs.push({lane:L, x:(off + i*(W/3)) % W});
+    });
     function upd(){
       var h = ''; for(var i=0;i<3;i++) h += i<lives ? '❤️' : '🖤';
-      hv.textContent = 'Vidas: ' + h; hs.textContent = 'Archivados: ' + done; hb.textContent = 'Mejor: ' + frogBest;
+      hv.textContent = 'Vidas: ' + h; hs.textContent = 'Archivados: ' + done + ' de ' + GOAL;
+    }
+    function end(){
+      if(ended) return; ended = true; state = 'over'; ctl.off(); draw();
+      if(done>=GOAL) party(false);
+      award(q, done>=GOAL ? 2 : (done>=1 ? 1 : 0));
     }
     function onDir(d){
       if(state==='over') return;
@@ -1043,20 +889,18 @@
       else if(d==='left' && frog.c>0) frog.c--;
       else if(d==='right' && frog.c<COLS-1) frog.c++;
       if(frog.r===0){
-        done++; if(done>frogBest) frogBest = done;
-        level = 1 + Math.floor(done/2);
-        if(done%5===0) party(false);
-        frog = {c:4, r:9}; upd();
+        done++; frog = {c:4,r:9}; upd();
+        if(done>=GOAL) end();
       }
     }
     function die(){
-      lives--; hitFlash = 0.5; frog = {c:4, r:9}; upd();
-      if(lives<=0){ state='over'; if(done>frogBest) frogBest = done; upd(); }
+      lives--; hitFlash = 0.5; frog = {c:4,r:9}; upd();
+      if(lives<=0) end();
     }
     function loop(now){
       if(state!=='play'){ draw(); return; }
       var dt = Math.min(0.05,(now-last)/1000); last = now;
-      var f = 1 + 0.12*(level-1);
+      var f = 1 + 0.15*done;
       objs.forEach(function(o){
         o.x += o.lane.dir*o.lane.v*f*S*dt;
         if(o.lane.dir>0 && o.x>W) o.x = -S;
@@ -1080,75 +924,120 @@
       }
       ctx.fillStyle = k.soft; ctx.font = '700 11px "Nunito Sans",sans-serif'; ctx.textAlign='left'; ctx.textBaseline='middle';
       ctx.fillText('OFICINA', 6, 4*S+S/2); ctx.fillText('INICIO', 6, 9*S+S/2);
-      [1,3,5,7].forEach(function(c){ emoji('🗄️', c*S+S/2+ (c>=4?S/2*0:0), S/2, S*.7); });
+      [1,3,5,7].forEach(function(c){ emoji('🗄️', c*S+S/2, S/2, S*.7); });
       objs.forEach(function(o){ emoji(o.lane.e, o.x+S/2, o.lane.r*S+S/2, S*.7); });
       emoji('🐸', frog.c*S+S/2, frog.r*S+S/2, S*.78);
-      ctx.save(); ctx.translate(frog.c*S+S*.78, frog.r*S+S*.2); emoji('📄',0,0,S*.36); ctx.restore();
+      emoji('📄', frog.c*S+S*.8, frog.r*S+S*.2, S*.34);
       if(hitFlash>0){ ctx.fillStyle = 'rgba(220,40,60,'+Math.min(.4,hitFlash)+')'; ctx.fillRect(0,0,W,H); }
       if(state!=='play'){
         ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(0,H/2-46,W,92);
         ctx.fillStyle = '#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
         ctx.font = '800 17px "Nunito Sans",sans-serif';
-        ctx.fillText(state==='over' ? 'Juego terminado: '+done+' archivados' : 'Pulsa una flecha para empezar', W/2, H/2-8);
+        ctx.fillText(state==='over' ? (done>=GOAL ? '¡Archivaste los '+GOAL+' documentos!' : 'Archivados: '+done+' de '+GOAL) : 'Pulsa una flecha para empezar', W/2, H/2-8);
         ctx.font = '600 13px "Nunito Sans",sans-serif';
-        ctx.fillText(state==='over' ? 'Toca Reiniciar para volver a intentarlo' : 'Llega al Archivo 🗄️ sin chocar', W/2, H/2+16);
+        ctx.fillText(state==='over' ? 'Sigue con el dato del coach' : 'Llega al Archivo sin chocar', W/2, H/2+16);
       }
     }
-    reset();
+    upd(); draw();
     return function(){ cancelAnimationFrame(raf); state='over'; ctl.off(); };
   }
 
-  /* ---------- parejas ---------- */
-  function memGame(root){
-    var PAIRS = [
-      ["Cronológica","05 ene. → 12 ene. → 28 ene."],
-      ["Alfabética","Acosta → García → Rojas"],
-      ["Geográfica","Bogotá → Cali → Medellín"],
-      ["Topográfica","Módulo 2 / Estante 1 / Caja 5"],
-      ["Borrado seguro","La papelera por sí sola no basta"],
-      ["Copia de seguridad","Se guarda en otra ubicación"]
-    ];
-    var deck = [];
-    PAIRS.forEach(function(p,i){ deck.push({id:i,t:p[0]}); deck.push({id:i,t:p[1]}); });
-    deck = shuffle(deck);
-    var info = el('p','ginfo','Encuentra las 6 parejas: cada concepto va con su ejemplo.');
-    var stat = el('div','ghud'); var sm = el('span',null,'Intentos: 0'), sp = el('span',null,'Parejas: 0 de 6'); stat.appendChild(sm); stat.appendChild(sp);
-    var board = el('div','mem');
-    var msg = el('div','gmsg'); msg.hidden = true;
-    root.appendChild(info); root.appendChild(stat); root.appendChild(board); root.appendChild(msg);
-    var open = [], lock = false, moves = 0, ok = 0;
-    deck.forEach(function(c){
-      var b = el('button','mcard'); b.type='button';
-      var inn = el('span','in'); inn.appendChild(el('span','b','i3')); inn.appendChild(el('span','f',c.t)); b.appendChild(inn);
-      b.setAttribute('aria-label','Carta boca abajo');
-      b.addEventListener('click', function(){
-        if(lock || b.classList.contains('flip') || b.classList.contains('ok')) return;
-        b.classList.add('flip'); b.setAttribute('aria-label', c.t); open.push({b:b,c:c});
-        if(open.length===2){
-          moves++; sm.textContent = 'Intentos: '+moves; lock = true;
-          var x = open[0], y = open[1];
-          if(x.c.id===y.c.id){
-            x.b.classList.add('ok'); y.b.classList.add('ok'); ok++; sp.textContent = 'Parejas: '+ok+' de 6';
-            open = []; lock = false;
-            if(ok===6){ msg.hidden=false; msg.textContent='¡Completaste las parejas en '+moves+' intentos! 🎉'; party(true); }
-          } else {
-            setTimeout(function(){ x.b.classList.remove('flip'); y.b.classList.remove('flip'); open = []; lock = false; }, 850);
-          }
-        }
-      });
-      board.appendChild(b);
-    });
-    var again = el('button','btn btn-ghost','Barajar de nuevo'); again.style.marginTop='14px';
-    again.addEventListener('click', function(){ pickGame('mem'); });
-    root.appendChild(again);
-    return null;
-  }
+  /* ---------- serpiente de la conservación digital ---------- */
+  function snakeUI(q, area){
+    var N=15, C=24, W=N*C, TARGET=8;
+    var GOOD = [['💾','Copia de seguridad'],['🔐','Acceso controlado'],['✅','Integridad verificada'],['🔄','Migración de formatos']];
+    var RISK = [['🦠','Virus'],['🔓','Clave compartida']];
+    var OPP = {up:'down',down:'up',left:'right',right:'left'};
+    var VEC = {up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
+    var wrap = el('div','garea'); area.appendChild(wrap);
+    var hud = el('div','ghud'), hs = el('span',null,'Buenas prácticas: 0 de '+TARGET), he = el('span','etapa','');
+    hud.appendChild(hs); hud.appendChild(he);
+    var cv = el('canvas','gcv'); cv.width = W; cv.height = W; cv.setAttribute('aria-label','Juego de la serpiente');
+    var ctx = cv.getContext('2d');
+    var ctl = controls(cv, onDir);
+    var info = el('p','ginfo','Come las buenas prácticas 💾 🔐 ✅ 🔄 y esquiva los riesgos 🦠 🔓. No te muerdas la cola. Usa las flechas del teclado, los botones o desliza el dedo.');
+    wrap.appendChild(hud); wrap.appendChild(cv); wrap.appendChild(ctl.pad); wrap.appendChild(info);
+    var snake = [{x:7,y:7},{x:6,y:7},{x:5,y:7}], dir = 'right', queue = [], items = [], eaten = 0, state = 'ready', timer = 0, delay = 170, ended = false, reason = '';
 
-  var GAMES = [
-    {id:'sopa', label:'🔎 Sopa de letras', fn:sopaGame},
-    {id:'snake', label:'🐍 Serpiente', fn:snakeGame},
-    {id:'frog', label:'🐸 Rana archivista', fn:froggerGame},
-    {id:'mem', label:'🃏 Parejas', fn:memGame}
-  ];
+    function free(minDist){
+      for(var t=0;t<300;t++){
+        var x = Math.floor(Math.random()*N), y = Math.floor(Math.random()*N), bad = false;
+        snake.forEach(function(s){ if(s.x===x&&s.y===y) bad = true; });
+        items.forEach(function(it){ if(it.x===x&&it.y===y) bad = true; });
+        if(minDist){ var h0 = snake[0]; if(Math.abs(h0.x-x)+Math.abs(h0.y-y) < minDist) bad = true; }
+        if(!bad) return {x:x,y:y};
+      }
+      return null;
+    }
+    function spawn(good){
+      var arr = good ? GOOD : RISK, p = arr[Math.floor(Math.random()*arr.length)], pos = free(good?0:4);
+      if(pos) items.push({x:pos.x,y:pos.y,e:p[0],l:p[1],good:good});
+    }
+    for(var i=0;i<3;i++) spawn(true);
+    for(var j=0;j<2;j++) spawn(false);
+
+    function end(win, why){
+      if(ended) return; ended = true; state = 'over'; reason = why; clearTimeout(timer); ctl.off(); draw();
+      if(win) party(false);
+      award(q, eaten>=TARGET ? 2 : (eaten>=4 ? 1 : 0));
+    }
+    function onDir(d){
+      if(state==='over') return;
+      var lastD = queue.length ? queue[queue.length-1] : dir;
+      if(d===lastD || OPP[d]===lastD) return;
+      if(queue.length<2) queue.push(d);
+      if(state==='ready'){ state='play'; timer = setTimeout(step, delay); }
+    }
+    function step(){
+      if(state!=='play') return;
+      if(queue.length) dir = queue.shift();
+      var h = snake[0], v = VEC[dir];
+      var nx = (h.x+v[0]+N)%N, ny = (h.y+v[1]+N)%N;
+      var self = false;
+      snake.forEach(function(s,i){ if(i<snake.length-1 && s.x===nx && s.y===ny) self = true; });
+      if(self){ end(false,'Te mordiste la cola'); return; }
+      var hitIdx = -1;
+      items.forEach(function(it,i){ if(it.x===nx && it.y===ny) hitIdx = i; });
+      snake.unshift({x:nx,y:ny});
+      if(hitIdx>=0){
+        var it = items[hitIdx];
+        if(!it.good){ draw(); end(false,'Tocaste un riesgo: '+it.l); return; }
+        items.splice(hitIdx,1); eaten++;
+        he.textContent = it.l; hs.textContent = 'Buenas prácticas: '+eaten+' de '+TARGET;
+        if(eaten>=TARGET){ draw(); end(true,'¡Protegiste el repositorio!'); return; }
+        spawn(true);
+        delay = Math.max(95, 170-eaten*7);
+      } else { snake.pop(); }
+      draw();
+      timer = setTimeout(step, delay);
+    }
+    function emoji(ch,x,y,size){ ctx.font = size+'px '+EMO; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(ch, x*C+C/2, y*C+C/2+1); }
+    function draw(){
+      var k = colors();
+      ctx.fillStyle = k.bg; ctx.fillRect(0,0,W,W);
+      ctx.fillStyle = k.line; ctx.globalAlpha = .45;
+      for(var a=0;a<N;a++) for(var b=0;b<N;b++) if((a+b)%2===0) ctx.fillRect(a*C,b*C,C,C);
+      ctx.globalAlpha = 1;
+      items.forEach(function(it){ emoji(it.e,it.x,it.y,C*.74); });
+      snake.forEach(function(s,i){
+        ctx.fillStyle = k.acc; ctx.globalAlpha = i===0 ? 1 : Math.max(.45, 1 - i*.035);
+        var p=2; ctx.beginPath();
+        if(ctx.roundRect) ctx.roundRect(s.x*C+p,s.y*C+p,C-p*2,C-p*2,6); else ctx.rect(s.x*C+p,s.y*C+p,C-p*2,C-p*2);
+        ctx.fill(); ctx.globalAlpha = 1;
+      });
+      var hd = snake[0]; ctx.fillStyle = k.accInk;
+      ctx.beginPath(); ctx.arc(hd.x*C+C*.35,hd.y*C+C*.4,2.2,0,7); ctx.arc(hd.x*C+C*.65,hd.y*C+C*.4,2.2,0,7); ctx.fill();
+      if(state!=='play'){
+        ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(0,W/2-44,W,88);
+        ctx.fillStyle = '#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.font = '800 16px "Nunito Sans",sans-serif';
+        ctx.fillText(state==='over' ? reason : 'Pulsa una flecha para empezar', W/2, W/2-8);
+        ctx.font = '600 13px "Nunito Sans",sans-serif';
+        ctx.fillText(state==='over' ? 'Buenas prácticas: '+eaten+' de '+TARGET : 'o desliza el dedo sobre el tablero', W/2, W/2+16);
+      }
+    }
+    draw();
+    return function(){ clearTimeout(timer); state='over'; ctl.off(); };
+  }
 })();
 </script>
