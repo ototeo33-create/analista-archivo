@@ -177,6 +177,42 @@
   .pf{position:absolute;top:-60px;animation-name:fall;animation-timing-function:ease-in;animation-fill-mode:forwards;}
   @keyframes fall{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--dx),110vh) rotate(540deg);opacity:.9}}
 
+  /* arcade */
+  .btn-link{background:none;border:none;color:var(--accent);font-weight:800;font-size:13px;cursor:pointer;padding:6px 2px;}
+  .btn-link:focus-visible,.atab:focus-visible,.cell:focus-visible,.dp:focus-visible,.mcard:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px;}
+  .atabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:14px;}
+  .atab{flex:none;padding:9px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-weight:800;font-size:13px;cursor:pointer;}
+  .atab.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
+  .garea{display:flex;flex-direction:column;align-items:center;}
+  .ghud{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:800;margin-bottom:10px;width:100%;max-width:360px;}
+  .ghud .etapa{color:var(--accent);flex:1;text-align:center;}
+  .gcv{display:block;width:100%;max-width:360px;height:auto;margin:0 auto;border-radius:14px;border:2px solid var(--line);touch-action:none;background:var(--surface-2);}
+  .dpad{display:grid;grid-template-columns:repeat(3,56px);grid-template-areas:". u ." "l d r";gap:6px;justify-content:center;margin:14px auto 0;}
+  .dp{width:56px;height:56px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-size:18px;cursor:pointer;touch-action:manipulation;}
+  .dp:active{background:var(--accent-soft);}
+  .dp-u{grid-area:u}.dp-l{grid-area:l}.dp-d{grid-area:d}.dp-r{grid-area:r}
+  .ginfo{font-size:13.5px;line-height:1.5;color:var(--soft);margin:14px 0 4px;text-align:center;max-width:46ch;}
+  .sopa{display:grid;grid-template-columns:repeat(12,1fr);gap:2px;width:100%;max-width:420px;margin:0 auto;user-select:none;-webkit-user-select:none;}
+  .cell{aspect-ratio:1;border:none;border-radius:6px;background:var(--surface-2);color:var(--ink);font-weight:800;font-size:clamp(11px,3.4vw,16px);cursor:pointer;padding:0;font-family:inherit;}
+  .cell.sel{background:var(--accent);color:var(--accent-ink);}
+  .cell.shake{animation:shake .25s;}
+  @keyframes shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+  .wl{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:8px;width:100%;}
+  .wl li{font-size:13.5px;line-height:1.4;padding:9px 12px;border-radius:12px;background:var(--surface-2);}
+  .wl li.done{background:var(--accent-soft);}
+  .wl li.done .cl{text-decoration:line-through;color:var(--soft);}
+  .wl b{font-family:'Unbounded',sans-serif;font-size:12px;margin-left:6px;color:var(--accent);}
+  .gmsg{margin-top:14px;padding:14px 16px;border-radius:14px;background:var(--accent-soft);font-weight:700;text-align:center;font-size:14.5px;width:100%;}
+  .mem{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;}
+  .mcard{perspective:700px;border:none;background:none;padding:0;cursor:pointer;min-height:96px;}
+  .mcard .in{position:relative;display:block;width:100%;height:100%;min-height:96px;transition:transform .45s;transform-style:preserve-3d;}
+  .mcard.flip .in,.mcard.ok .in{transform:rotateY(180deg);}
+  .mcard .f,.mcard .b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:8px;font-size:13px;font-weight:700;line-height:1.3;}
+  .mcard .b{background:var(--accent);color:var(--accent-ink);font-family:'Unbounded',sans-serif;font-size:20px;}
+  .mcard .f{background:var(--surface-2);color:var(--ink);transform:rotateY(180deg);border:2px solid var(--line);}
+  .mcard.ok .f{border-color:var(--t-val);background:color-mix(in srgb,var(--t-val) 16%,var(--surface));}
+  @media (min-width:520px){.mem{grid-template-columns:repeat(4,1fr);}}
+
   @media (max-width:480px){
     .card{padding:20px 16px;border-radius:16px;}
     .q{font-size:17px;}
@@ -217,7 +253,10 @@
       <label for="in-name">Tu nombre (opcional)</label>
       <input id="in-name" type="text" autocomplete="given-name" placeholder="Para personalizar tu informe">
     </div>
-    <div class="row"><button class="btn btn-primary" id="b-start">Aceptar el caso</button></div>
+    <div class="row">
+      <button class="btn btn-primary" id="b-start">Aceptar el caso</button>
+      <button class="btn btn-ghost" id="b-arcade">🎮 Sala de juegos</button>
+    </div>
   </section>
 
   <section id="s-quiz" hidden>
@@ -229,6 +268,16 @@
   </section>
 
   <section id="s-res" hidden class="stack"></section>
+
+  <section id="s-arcade" hidden>
+    <div class="top">
+      <div class="top-row"><span>🎮 Sala de juegos · Archivo i3</span><button class="btn-link" id="arc-back">← Volver</button></div>
+    </div>
+    <div class="card">
+      <div class="atabs" id="arc-tabs" role="tablist"></div>
+      <div class="garea" id="arc-body"></div>
+    </div>
+  </section>
 
 </div>
 
@@ -391,7 +440,7 @@
   var $ = function(id){ return document.getElementById(id); };
   var sStart=$('s-start'), sQuiz=$('s-quiz'), sRes=$('s-res'), card=$('qcard');
 
-  function show(el){ [sStart,sQuiz,sRes].forEach(function(s){ s.hidden = s!==el; }); window.scrollTo({top:0, behavior:'auto'}); }
+  function show(el){ [sStart,sQuiz,sRes,$('s-arcade')].forEach(function(s){ s.hidden = s!==el; }); window.scrollTo({top:0, behavior:'auto'}); }
   function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
   function el(tag, cls, text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!==undefined) e.textContent=text; return e; }
 
@@ -670,7 +719,9 @@
     var go = el('button','btn btn-primary','🎉 Sellar mi compromiso');
     var again = el('button','btn btn-ghost','Volver a analizar el archivo');
     again.addEventListener('click', function(){ resetState(); show(sStart); });
-    row.appendChild(go); row.appendChild(again); c4.appendChild(row);
+    var play = el('button','btn btn-ghost','🎮 Sala de juegos');
+    play.addEventListener('click', function(){ openArcade('res'); });
+    row.appendChild(go); row.appendChild(play); row.appendChild(again); c4.appendChild(row);
     var fb = el('div','commit-fb'); fb.hidden = true; fb.setAttribute('aria-live','polite'); c4.appendChild(fb);
     go.addEventListener('click', function(){
       var a = i1.value.trim(), b = i2.value.trim();
@@ -704,5 +755,400 @@
       Array.prototype.forEach.call(sRes.querySelectorAll('.fill'), function(f){ f.style.width = f.dataset.w + '%'; });
     });});
   }
+
+  /* ================= SALA DE JUEGOS ================= */
+  var arc = {game:'sopa', stop:null, from:'start'};
+  var snakeBest = 0, frogBest = 0;
+  var EMO = '"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';
+  var KEYS = {ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',W:'up',s:'down',S:'down',a:'left',A:'left',d:'right',D:'right'};
+
+  function colors(){
+    var cs = getComputedStyle(document.documentElement);
+    function g(n){ return cs.getPropertyValue(n).trim(); }
+    return {bg:g('--surface-2'), line:g('--line'), ink:g('--ink'), acc:g('--accent'), accInk:g('--accent-ink'), accSoft:g('--accent-soft'), soft:g('--soft'), good:g('--t-val'), bad:g('--t-eli')};
+  }
+
+  function controls(canvas, onDir){
+    function kd(e){
+      var d = KEYS[e.key]; if(!d) return;
+      if(e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+      e.preventDefault(); onDir(d);
+    }
+    document.addEventListener('keydown', kd);
+    var sx=0, sy=0;
+    canvas.addEventListener('touchstart', function(e){ var t=e.touches[0]; sx=t.clientX; sy=t.clientY; }, {passive:true});
+    canvas.addEventListener('touchend', function(e){
+      var t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy;
+      if(Math.max(Math.abs(dx),Math.abs(dy)) < 20) return;
+      onDir(Math.abs(dx)>Math.abs(dy) ? (dx>0?'right':'left') : (dy>0?'down':'up'));
+    }, {passive:true});
+    var pad = el('div','dpad');
+    [['u','▲','up'],['l','◀','left'],['d','▼','down'],['r','▶','right']].forEach(function(p){
+      var b = el('button','dp dp-'+p[0],p[1]); b.setAttribute('aria-label',p[2]);
+      b.addEventListener('pointerdown', function(e){ e.preventDefault(); onDir(p[2]); });
+      pad.appendChild(b);
+    });
+    return {pad:pad, off:function(){ document.removeEventListener('keydown', kd); }};
+  }
+
+  function stopArc(){ if(arc.stop){ arc.stop(); arc.stop = null; } }
+
+  function pickGame(id){
+    stopArc(); arc.game = id;
+    var tabs = $('arc-tabs'); tabs.innerHTML = '';
+    GAMES.forEach(function(g){
+      var b = el('button','atab' + (g.id===id?' on':''), g.label);
+      b.setAttribute('role','tab'); b.setAttribute('aria-selected', g.id===id ? 'true':'false');
+      b.addEventListener('click', function(){ pickGame(g.id); });
+      tabs.appendChild(b);
+    });
+    var body = $('arc-body'); body.innerHTML = '';
+    var g = GAMES.filter(function(x){ return x.id===id; })[0];
+    arc.stop = g.fn(body) || null;
+  }
+  function openArcade(from){ arc.from = from; show($('s-arcade')); pickGame(arc.game); }
+  $('arc-back').addEventListener('click', function(){ stopArc(); show(arc.from==='res' ? sRes : sStart); });
+  $('b-arcade').addEventListener('click', function(){ openArcade('start'); });
+
+  /* ---------- sopa de letras ---------- */
+  function sopaGame(root){
+    var N = 12;
+    var WORDS = [
+      {w:"CONSERVACION", c:"Medidas para reducir el deterioro y prolongar la vida útil"},
+      {w:"CRONOLOGICA", c:"Método de ordenación que sigue las fechas"},
+      {w:"EXPEDIENTE", c:"Conjunto de documentos de un mismo trámite"},
+      {w:"TRITURACION", c:"Método físico que reduce el papel a fragmentos"},
+      {w:"INTEGRIDAD", c:"Que los archivos no se alteren ni se corrompan"},
+      {w:"AUDITORIA", c:"Revisión que exige evidencias disponibles y trazables"},
+      {w:"ARCHIVO", c:"Lugar donde se custodian y organizan los documentos"},
+      {w:"BACKUP", c:"Copia de seguridad, en inglés"},
+      {w:"ORDEN", c:"Lo que se conserva cuando se respeta el trámite original"}
+    ];
+    var DIRS = [[0,1],[1,0],[1,1],[-1,1]];
+    function build(){
+      for(var attempt=0; attempt<80; attempt++){
+        var g = []; for(var i=0;i<N;i++){ g.push(new Array(N).fill('')); }
+        var ok = true, list = WORDS.slice().sort(function(a,b){ return b.w.length-a.w.length; });
+        for(var wi=0; wi<list.length && ok; wi++){
+          var w = list[wi].w, done = false;
+          for(var t=0; t<400 && !done; t++){
+            var d = DIRS[Math.floor(Math.random()*DIRS.length)];
+            var r0 = Math.floor(Math.random()*N), c0 = Math.floor(Math.random()*N);
+            var r1 = r0+d[0]*(w.length-1), c1 = c0+d[1]*(w.length-1);
+            if(r1<0||r1>=N||c1<0||c1>=N) continue;
+            var fits = true;
+            for(var k=0;k<w.length;k++){ var cell = g[r0+d[0]*k][c0+d[1]*k]; if(cell!=='' && cell!==w[k]){ fits=false; break; } }
+            if(!fits) continue;
+            for(var k2=0;k2<w.length;k2++){ g[r0+d[0]*k2][c0+d[1]*k2] = w[k2]; }
+            done = true;
+          }
+          if(!done) ok = false;
+        }
+        if(ok){
+          var L = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          for(var r=0;r<N;r++) for(var c=0;c<N;c++) if(g[r][c]==='') g[r][c] = L[Math.floor(Math.random()*26)];
+          return g;
+        }
+      }
+      return null;
+    }
+    var grid = build();
+    var found = {}, first = null, count = 0;
+    var cells = [];
+    var info = el('p','ginfo','Toca la primera y la última letra de cada palabra. Pueden estar en horizontal, vertical o diagonal.');
+    var board = el('div','sopa');
+    var list = el('ul','wl');
+    var msg = el('div','gmsg'); msg.hidden = true;
+    root.appendChild(info); root.appendChild(board); root.appendChild(list); root.appendChild(msg);
+
+    for(var r=0;r<N;r++){
+      cells.push([]);
+      for(var c=0;c<N;c++){
+        (function(r,c){
+          var b = el('button','cell',grid[r][c]);
+          b.type = 'button'; b.setAttribute('aria-label','Letra '+grid[r][c]+', fila '+(r+1)+', columna '+(c+1));
+          b.addEventListener('click', function(){ tap(r,c); });
+          board.appendChild(b); cells[r].push(b);
+        })(r,c);
+      }
+    }
+    var lis = {};
+    WORDS.forEach(function(wd){
+      var li = el('li'); var cl = el('span','cl',wd.c); var nb = el('b',null,'(' + wd.w.length + ' letras)');
+      li.appendChild(cl); li.appendChild(nb); list.appendChild(li); lis[wd.w] = {li:li, nb:nb};
+    });
+    function clearSel(){ if(first){ cells[first.r][first.c].classList.remove('sel'); first = null; } }
+    function tap(r,c){
+      if(!first){ first = {r:r,c:c}; cells[r][c].classList.add('sel'); return; }
+      if(first.r===r && first.c===c){ clearSel(); return; }
+      var dr = r-first.r, dc = c-first.c;
+      if(!(dr===0 || dc===0 || Math.abs(dr)===Math.abs(dc))){ clearSel(); cells[r][c].classList.add('shake'); setTimeout(function(){ cells[r][c].classList.remove('shake'); },260); return; }
+      var len = Math.max(Math.abs(dr),Math.abs(dc))+1, sr = Math.sign(dr), sc = Math.sign(dc), s = '', path = [];
+      for(var k=0;k<len;k++){ var rr = first.r+sr*k, cc = first.c+sc*k; s += grid[rr][cc]; path.push([rr,cc]); }
+      var rev = s.split('').reverse().join('');
+      var hit = null;
+      WORDS.forEach(function(wd){ if(!found[wd.w] && (wd.w===s || wd.w===rev)) hit = wd; });
+      var f = first; clearSel();
+      if(hit){
+        found[hit.w] = true; count++;
+        var hue = (count*41) % 360;
+        path.forEach(function(p){ var b = cells[p[0]][p[1]]; b.style.background = 'hsla('+hue+',70%,55%,.55)'; });
+        lis[hit.w].li.classList.add('done'); lis[hit.w].nb.textContent = '✓ ' + hit.w;
+        if(count === WORDS.length){
+          msg.hidden = false; msg.textContent = '¡Encontraste las ' + WORDS.length + ' palabras! Eres un archivista de pies a cabeza. 🎉';
+          party(true);
+        }
+      } else {
+        var last = cells[r][c]; last.classList.add('shake'); setTimeout(function(){ last.classList.remove('shake'); },260);
+      }
+    }
+    var again = el('button','btn btn-ghost','Nueva sopa'); again.style.marginTop = '14px';
+    again.addEventListener('click', function(){ pickGame('sopa'); });
+    root.appendChild(again);
+    return null;
+  }
+
+  /* ---------- serpiente ---------- */
+  function snakeGame(root){
+    var N=15, C=24, W=N*C;
+    var ETAPAS = ["Producción o recepción","Distribución","Trámite","Organización","Consulta","Conservación","Disposición final"];
+    var OPP = {up:'down',down:'up',left:'right',right:'left'};
+    var VEC = {up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
+    var hud = el('div','ghud'), hs = el('span',null,'Puntos: 0'), he = el('span','etapa','Etapa: —'), hb = el('span',null,'Mejor: '+snakeBest);
+    hud.appendChild(hs); hud.appendChild(he); hud.appendChild(hb);
+    var cv = el('canvas','gcv'); cv.width = W; cv.height = W; cv.setAttribute('aria-label','Juego de la serpiente');
+    var ctx = cv.getContext('2d');
+    var ctl = controls(cv, onDir);
+    var info = el('p','ginfo','Come documentos 📄 y recorre las etapas del ciclo de vida. Evita 💧 humedad, 🔥 fuego y 🐛 plagas, y no te muerdas la cola. Usa las flechas o desliza el dedo.');
+    var rs = el('button','btn btn-ghost','Reiniciar'); rs.style.marginTop='10px';
+    rs.addEventListener('click', reset);
+    root.appendChild(hud); root.appendChild(cv); root.appendChild(ctl.pad); root.appendChild(info); root.appendChild(rs);
+    var snake, dir, queue, doc, haz, score, eaten, state, timer, delay, flash;
+
+    function free(minDist){
+      for(var t=0;t<200;t++){
+        var x = Math.floor(Math.random()*N), y = Math.floor(Math.random()*N), bad = false;
+        snake.forEach(function(s){ if(s.x===x&&s.y===y) bad = true; });
+        haz.forEach(function(h){ if(h.x===x&&h.y===y) bad = true; });
+        if(doc && doc.x===x && doc.y===y) bad = true;
+        if(minDist){ var h0 = snake[0]; if(Math.abs(h0.x-x)+Math.abs(h0.y-y) < minDist) bad = true; }
+        if(!bad) return {x:x,y:y};
+      }
+      return null;
+    }
+    function reset(){
+      clearTimeout(timer);
+      snake = [{x:7,y:7},{x:6,y:7},{x:5,y:7}]; dir='right'; queue=[]; haz=[]; doc=null;
+      score=0; eaten=0; state='ready'; delay=150; flash='';
+      doc = free(0); upd(); draw();
+    }
+    function upd(){ hs.textContent = 'Puntos: '+score; hb.textContent = 'Mejor: '+snakeBest; he.textContent = 'Etapa: ' + (flash || (eaten ? ETAPAS[(eaten-1)%7] : '—')); }
+    function onDir(d){
+      if(state==='over') return;
+      var last = queue.length ? queue[queue.length-1] : dir;
+      if(d===last || OPP[d]===last) return;
+      if(queue.length<2) queue.push(d);
+      if(state==='ready'){ state='play'; timer = setTimeout(step, delay); }
+    }
+    function step(){
+      if(state!=='play') return;
+      if(queue.length) dir = queue.shift();
+      var h = snake[0], v = VEC[dir];
+      var nx = (h.x+v[0]+N)%N, ny = (h.y+v[1]+N)%N;
+      var hit = false;
+      snake.forEach(function(s,i){ if(i<snake.length-1 && s.x===nx && s.y===ny) hit = true; });
+      haz.forEach(function(z){ if(z.x===nx && z.y===ny) hit = true; });
+      if(hit){ over(); return; }
+      snake.unshift({x:nx,y:ny});
+      if(doc && nx===doc.x && ny===doc.y){
+        eaten++; score += 10;
+        if(eaten%7===0){ score += 20; flash='¡Ciclo completo! +20'; setTimeout(function(){ flash=''; upd(); },1600); party(false); }
+        doc = free(0);
+        if(eaten%3===0 && haz.length<8){ var z = free(4); if(z){ z.e = ['💧','🔥','🐛'][Math.floor(Math.random()*3)]; haz.push(z); } }
+        delay = Math.max(75, 150-eaten*3);
+      } else { snake.pop(); }
+      upd(); draw();
+      timer = setTimeout(step, delay);
+    }
+    function over(){
+      state='over'; if(score>snakeBest) snakeBest = score; upd(); draw();
+      if(eaten>=7) party(false);
+    }
+    function emoji(ch,x,y,size){ ctx.font = size+'px '+EMO; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(ch, x*C+C/2, y*C+C/2+1); }
+    function draw(){
+      var k = colors();
+      ctx.fillStyle = k.bg; ctx.fillRect(0,0,W,W);
+      ctx.fillStyle = k.line;
+      for(var i=0;i<N;i++) for(var j=0;j<N;j++) if((i+j)%2===0) ctx.fillRect(i*C,j*C,C,C);
+      ctx.globalAlpha = .35; ctx.fillStyle = k.bg; for(var a=0;a<N;a++) for(var b=0;b<N;b++) if((a+b)%2===0) ctx.fillRect(a*C,b*C,C,C); ctx.globalAlpha = 1;
+      haz.forEach(function(z){ emoji(z.e,z.x,z.y,C*.72); });
+      if(doc) emoji('📄',doc.x,doc.y,C*.78);
+      snake.forEach(function(s,i){
+        ctx.fillStyle = k.acc; ctx.globalAlpha = i===0 ? 1 : Math.max(.45, 1 - i*.035);
+        var p=2; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(s.x*C+p,s.y*C+p,C-p*2,C-p*2,6) : ctx.rect(s.x*C+p,s.y*C+p,C-p*2,C-p*2); ctx.fill();
+        ctx.globalAlpha = 1;
+      });
+      var hd = snake[0]; ctx.fillStyle = k.accInk;
+      ctx.beginPath(); ctx.arc(hd.x*C+C*.35,hd.y*C+C*.4,2.2,0,7); ctx.arc(hd.x*C+C*.65,hd.y*C+C*.4,2.2,0,7); ctx.fill();
+      if(state!=='play'){
+        ctx.fillStyle = 'rgba(0,0,0,.5)'; ctx.fillRect(0,W/2-44,W,88);
+        ctx.fillStyle = '#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.font = '800 17px "Nunito Sans",sans-serif';
+        ctx.fillText(state==='over' ? 'Juego terminado: '+score+' puntos' : 'Pulsa una flecha para empezar', W/2, W/2-8);
+        ctx.font = '600 13px "Nunito Sans",sans-serif';
+        ctx.fillText(state==='over' ? 'Toca Reiniciar para jugar otra vez' : 'o desliza el dedo sobre el tablero', W/2, W/2+16);
+      }
+    }
+    reset();
+    return function(){ clearTimeout(timer); state='over'; ctl.off(); };
+  }
+
+  /* ---------- rana archivista ---------- */
+  function froggerGame(root){
+    var S=40, COLS=9, ROWS=10, W=S*COLS, H=S*ROWS;
+    var LANES = [
+      {r:1,dir:1,v:1.5,e:'🔥'},{r:2,dir:-1,v:1.0,e:'💧'},{r:3,dir:1,v:2.0,e:'🐛'},
+      {r:5,dir:-1,v:1.3,e:'🐀'},{r:6,dir:1,v:1.8,e:'🍄'},{r:7,dir:-1,v:2.2,e:'💧'},{r:8,dir:1,v:1.1,e:'🔥'}
+    ];
+    var hud = el('div','ghud'), hv = el('span',null,'Vidas: ❤️❤️❤️'), hs = el('span','etapa','Archivados: 0'), hb = el('span',null,'Mejor: '+frogBest);
+    hud.appendChild(hv); hud.appendChild(hs); hud.appendChild(hb);
+    var cv = el('canvas','gcv'); cv.width = W; cv.height = H; cv.style.aspectRatio = W+' / '+H; cv.setAttribute('aria-label','Juego de la rana archivista');
+    var ctx = cv.getContext('2d');
+    var ctl = controls(cv, onDir);
+    var info = el('p','ginfo','Lleva el documento 📄 hasta el Archivo 🗄️ esquivando los riesgos de conservación: fuego, humedad, plagas, roedores y hongos. Tienes 3 vidas.');
+    var rs = el('button','btn btn-ghost','Reiniciar'); rs.style.marginTop='10px';
+    rs.addEventListener('click', reset);
+    root.appendChild(hud); root.appendChild(cv); root.appendChild(ctl.pad); root.appendChild(info); root.appendChild(rs);
+    var objs, frog, lives, done, level, state, raf, last, hitFlash;
+
+    function reset(){
+      cancelAnimationFrame(raf);
+      objs = [];
+      LANES.forEach(function(L){
+        var n = 3, off = Math.random()*W;
+        for(var i=0;i<n;i++) objs.push({lane:L, x:(off + i*(W/n)) % W});
+      });
+      frog = {c:4, r:9}; lives = 3; done = 0; level = 1; state = 'ready'; hitFlash = 0; last = 0;
+      upd(); draw();
+    }
+    function upd(){
+      var h = ''; for(var i=0;i<3;i++) h += i<lives ? '❤️' : '🖤';
+      hv.textContent = 'Vidas: ' + h; hs.textContent = 'Archivados: ' + done; hb.textContent = 'Mejor: ' + frogBest;
+    }
+    function onDir(d){
+      if(state==='over') return;
+      if(state==='ready'){ state='play'; last = performance.now(); raf = requestAnimationFrame(loop); }
+      if(d==='up' && frog.r>0) frog.r--;
+      else if(d==='down' && frog.r<ROWS-1) frog.r++;
+      else if(d==='left' && frog.c>0) frog.c--;
+      else if(d==='right' && frog.c<COLS-1) frog.c++;
+      if(frog.r===0){
+        done++; if(done>frogBest) frogBest = done;
+        level = 1 + Math.floor(done/2);
+        if(done%5===0) party(false);
+        frog = {c:4, r:9}; upd();
+      }
+    }
+    function die(){
+      lives--; hitFlash = 0.5; frog = {c:4, r:9}; upd();
+      if(lives<=0){ state='over'; if(done>frogBest) frogBest = done; upd(); }
+    }
+    function loop(now){
+      if(state!=='play'){ draw(); return; }
+      var dt = Math.min(0.05,(now-last)/1000); last = now;
+      var f = 1 + 0.12*(level-1);
+      objs.forEach(function(o){
+        o.x += o.lane.dir*o.lane.v*f*S*dt;
+        if(o.lane.dir>0 && o.x>W) o.x = -S;
+        if(o.lane.dir<0 && o.x<-S) o.x = W;
+      });
+      if(hitFlash>0) hitFlash -= dt;
+      var fx = frog.c*S;
+      for(var i=0;i<objs.length;i++){
+        var o = objs[i];
+        if(o.lane.r===frog.r && Math.abs(o.x-fx) < S*0.62){ die(); break; }
+      }
+      draw();
+      if(state==='play') raf = requestAnimationFrame(loop);
+    }
+    function emoji(ch,x,y,size){ ctx.font = size+'px '+EMO; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(ch, x, y+1); }
+    function draw(){
+      var k = colors();
+      for(var r=0;r<ROWS;r++){
+        ctx.fillStyle = (r===0||r===4||r===9) ? k.accSoft : k.bg; ctx.fillRect(0,r*S,W,S);
+        if(r!==0 && r!==4 && r!==9){ ctx.fillStyle = k.line; ctx.globalAlpha=.5; ctx.fillRect(0,r*S+S-1,W,1); ctx.globalAlpha=1; }
+      }
+      ctx.fillStyle = k.soft; ctx.font = '700 11px "Nunito Sans",sans-serif'; ctx.textAlign='left'; ctx.textBaseline='middle';
+      ctx.fillText('OFICINA', 6, 4*S+S/2); ctx.fillText('INICIO', 6, 9*S+S/2);
+      [1,3,5,7].forEach(function(c){ emoji('🗄️', c*S+S/2+ (c>=4?S/2*0:0), S/2, S*.7); });
+      objs.forEach(function(o){ emoji(o.lane.e, o.x+S/2, o.lane.r*S+S/2, S*.7); });
+      emoji('🐸', frog.c*S+S/2, frog.r*S+S/2, S*.78);
+      ctx.save(); ctx.translate(frog.c*S+S*.78, frog.r*S+S*.2); emoji('📄',0,0,S*.36); ctx.restore();
+      if(hitFlash>0){ ctx.fillStyle = 'rgba(220,40,60,'+Math.min(.4,hitFlash)+')'; ctx.fillRect(0,0,W,H); }
+      if(state!=='play'){
+        ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(0,H/2-46,W,92);
+        ctx.fillStyle = '#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.font = '800 17px "Nunito Sans",sans-serif';
+        ctx.fillText(state==='over' ? 'Juego terminado: '+done+' archivados' : 'Pulsa una flecha para empezar', W/2, H/2-8);
+        ctx.font = '600 13px "Nunito Sans",sans-serif';
+        ctx.fillText(state==='over' ? 'Toca Reiniciar para volver a intentarlo' : 'Llega al Archivo 🗄️ sin chocar', W/2, H/2+16);
+      }
+    }
+    reset();
+    return function(){ cancelAnimationFrame(raf); state='over'; ctl.off(); };
+  }
+
+  /* ---------- parejas ---------- */
+  function memGame(root){
+    var PAIRS = [
+      ["Cronológica","05 ene. → 12 ene. → 28 ene."],
+      ["Alfabética","Acosta → García → Rojas"],
+      ["Geográfica","Bogotá → Cali → Medellín"],
+      ["Topográfica","Módulo 2 / Estante 1 / Caja 5"],
+      ["Borrado seguro","La papelera por sí sola no basta"],
+      ["Copia de seguridad","Se guarda en otra ubicación"]
+    ];
+    var deck = [];
+    PAIRS.forEach(function(p,i){ deck.push({id:i,t:p[0]}); deck.push({id:i,t:p[1]}); });
+    deck = shuffle(deck);
+    var info = el('p','ginfo','Encuentra las 6 parejas: cada concepto va con su ejemplo.');
+    var stat = el('div','ghud'); var sm = el('span',null,'Intentos: 0'), sp = el('span',null,'Parejas: 0 de 6'); stat.appendChild(sm); stat.appendChild(sp);
+    var board = el('div','mem');
+    var msg = el('div','gmsg'); msg.hidden = true;
+    root.appendChild(info); root.appendChild(stat); root.appendChild(board); root.appendChild(msg);
+    var open = [], lock = false, moves = 0, ok = 0;
+    deck.forEach(function(c){
+      var b = el('button','mcard'); b.type='button';
+      var inn = el('span','in'); inn.appendChild(el('span','b','i3')); inn.appendChild(el('span','f',c.t)); b.appendChild(inn);
+      b.setAttribute('aria-label','Carta boca abajo');
+      b.addEventListener('click', function(){
+        if(lock || b.classList.contains('flip') || b.classList.contains('ok')) return;
+        b.classList.add('flip'); b.setAttribute('aria-label', c.t); open.push({b:b,c:c});
+        if(open.length===2){
+          moves++; sm.textContent = 'Intentos: '+moves; lock = true;
+          var x = open[0], y = open[1];
+          if(x.c.id===y.c.id){
+            x.b.classList.add('ok'); y.b.classList.add('ok'); ok++; sp.textContent = 'Parejas: '+ok+' de 6';
+            open = []; lock = false;
+            if(ok===6){ msg.hidden=false; msg.textContent='¡Completaste las parejas en '+moves+' intentos! 🎉'; party(true); }
+          } else {
+            setTimeout(function(){ x.b.classList.remove('flip'); y.b.classList.remove('flip'); open = []; lock = false; }, 850);
+          }
+        }
+      });
+      board.appendChild(b);
+    });
+    var again = el('button','btn btn-ghost','Barajar de nuevo'); again.style.marginTop='14px';
+    again.addEventListener('click', function(){ pickGame('mem'); });
+    root.appendChild(again);
+    return null;
+  }
+
+  var GAMES = [
+    {id:'sopa', label:'🔎 Sopa de letras', fn:sopaGame},
+    {id:'snake', label:'🐍 Serpiente', fn:snakeGame},
+    {id:'frog', label:'🐸 Rana archivista', fn:froggerGame},
+    {id:'mem', label:'🃏 Parejas', fn:memGame}
+  ];
 })();
 </script>
