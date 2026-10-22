@@ -1,0 +1,708 @@
+<title>Analista de Archivo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap');
+
+  :root{
+    --bg:#EEF0F7;
+    --surface:#FFFFFF;
+    --surface-2:#E2E5F1;
+    --ink:#161A33;
+    --soft:#5B6080;
+    --line:#D3D7E8;
+    --accent:#3F3BB5;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#E6E5F8;
+    --t-ord:#7A3FD0;
+    --t-val:#0B7A75;
+    --t-eli:#C2335B;
+    --t-cfis:#A8680F;
+    --t-cdig:#1C5FD4;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E1024;
+      --surface:#171A38;
+      --surface-2:#222650;
+      --ink:#ECEEFB;
+      --soft:#A3A8CC;
+      --line:#2D3263;
+      --accent:#9C99FF;
+      --accent-ink:#0D0E26;
+      --accent-soft:#262A5C;
+      --t-ord:#B792FF;
+      --t-val:#4FD1C5;
+      --t-eli:#FF7FA2;
+      --t-cfis:#F0B65B;
+      --t-cdig:#7FAAFF;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E1024;--surface:#171A38;--surface-2:#222650;--ink:#ECEEFB;--soft:#A3A8CC;--line:#2D3263;
+    --accent:#9C99FF;--accent-ink:#0D0E26;--accent-soft:#262A5C;
+    --t-ord:#B792FF;--t-val:#4FD1C5;--t-eli:#FF7FA2;--t-cfis:#F0B65B;--t-cdig:#7FAAFF;
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box;}
+  body{background:var(--bg);color:var(--ink);font-family:'Nunito Sans',system-ui,sans-serif;margin:0;}
+  .wrap{max-width:720px;margin:0 auto;padding:20px 16px 56px;}
+  h1,h2,h3{font-family:'Unbounded','Nunito Sans',sans-serif;font-weight:700;margin:0;text-wrap:balance;letter-spacing:-0.02em;}
+  button{font-family:inherit;}
+  [hidden]{display:none!important;}
+  .eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);}
+  .k-ord{--dc:var(--t-ord);} .k-val{--dc:var(--t-val);} .k-eli{--dc:var(--t-eli);}
+  .k-cfis{--dc:var(--t-cfis);} .k-cdig{--dc:var(--t-cdig);} .k-none{--dc:var(--accent);}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px;}
+  .btn{appearance:none;border:none;border-radius:12px;padding:14px 24px;font-weight:800;font-size:15px;cursor:pointer;transition:transform .12s ease,opacity .12s ease;}
+  .btn:active{transform:scale(.97);}
+  .btn:focus-visible,.opt:focus-visible,.step:focus-visible,.gift:focus-visible,.hall:focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
+  .btn-primary{background:var(--accent);color:var(--accent-ink);}
+  .btn-primary:disabled{opacity:.35;cursor:not-allowed;}
+  .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
+  .row.end{justify-content:flex-end;}
+
+  /* start */
+  .brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:13px;margin-bottom:18px;}
+  .brand b{background:var(--ink);color:var(--bg);font-family:'Unbounded',sans-serif;border-radius:8px;padding:5px 9px;font-size:13px;}
+  .hero h1{font-size:clamp(30px,7.2vw,46px);line-height:1.04;margin:12px 0 18px;}
+  .hero h1 span{color:var(--accent);}
+  .coachbox{display:flex;gap:16px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px;}
+  .avatar{flex:none;width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-weight:700;font-size:18px;}
+  .coachbox .who{font-weight:800;font-size:15px;}
+  .coachbox .role{font-size:12.5px;color:var(--soft);font-weight:600;margin-bottom:10px;}
+  .coachbox p{margin:0 0 10px;font-size:15.5px;line-height:1.6;}
+  .coachbox p:last-child{margin:0;}
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
+  .pillar{background:var(--surface-2);border-radius:14px;padding:14px 12px;}
+  .pillar b{display:block;font-family:'Unbounded',sans-serif;font-size:13px;letter-spacing:.04em;margin-bottom:6px;color:var(--accent);}
+  .pillar span{font-size:13px;line-height:1.45;color:var(--soft);font-weight:600;}
+  .mission{margin-top:16px;display:grid;gap:8px;}
+  .mission div{display:flex;gap:12px;align-items:center;font-size:14px;font-weight:700;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 14px;}
+  .mission i{flex:none;width:28px;height:28px;border-radius:50%;background:var(--dc);color:#fff;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;font-family:'Unbounded',sans-serif;}
+  .mission span{margin-left:auto;color:var(--soft);font-weight:600;font-size:12.5px;text-align:right;}
+  .field{margin-top:24px;max-width:380px;}
+  .field label{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);margin-bottom:6px;}
+  .field input{width:100%;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-size:15px;font-family:inherit;}
+  .field input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent);}
+
+  /* trail */
+  .top{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;padding:6px 0 14px;}
+  .top-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--soft);font-weight:700;margin-bottom:12px;}
+  .trail{position:relative;display:grid;grid-template-columns:repeat(10,1fr);align-items:center;}
+  .trail::before{content:"";position:absolute;left:5%;right:5%;top:50%;height:3px;background:var(--line);transform:translateY(-50%);border-radius:3px;}
+  .trail .fillbar{position:absolute;left:5%;top:50%;height:3px;background:var(--accent);transform:translateY(-50%);border-radius:3px;transition:width .5s ease;}
+  .node{position:relative;justify-self:center;width:24px;height:24px;border-radius:50%;background:var(--surface);border:2.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--soft);}
+  .node.done{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
+  .node.now{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);transform:scale(1.18);}
+  .tagrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:8px;flex-wrap:wrap;}
+  .dtag{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--dc);display:inline-flex;align-items:center;gap:7px;}
+  .dtag i{width:9px;height:9px;border-radius:50%;background:var(--dc);display:block;}
+  .gtag{font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:99px;background:var(--accent-soft);color:var(--accent);}
+  .scene{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:15px;line-height:1.55;margin-bottom:16px;border-left:4px solid var(--dc);}
+  .scene b{display:block;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dc);margin-bottom:4px;}
+  .q{font-family:'Unbounded',sans-serif;font-weight:700;font-size:19px;line-height:1.3;margin:0 0 18px;text-wrap:balance;}
+
+  .opts{display:flex;flex-direction:column;gap:10px;}
+  .opt{display:block;width:100%;text-align:left;padding:14px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-size:15px;line-height:1.45;cursor:pointer;transition:border-color .12s,background .12s;font-weight:600;}
+  .opt:hover{border-color:var(--dc);}
+  .opt.picked{border-color:var(--dc);background:color-mix(in srgb,var(--dc) 14%,var(--surface));}
+  .opt:disabled{cursor:default;}
+  .opt:disabled:not(.picked){opacity:.55;}
+  .hall{display:flex;gap:12px;align-items:flex-start;}
+  .hall .box{flex:none;width:22px;height:22px;border-radius:7px;border:2px solid var(--line);margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--accent-ink);}
+  .hall.picked .box{background:var(--dc);border-color:var(--dc);}
+
+  .note{margin-top:20px;border-radius:14px;padding:14px 16px;background:var(--accent-soft);font-size:14.5px;line-height:1.55;}
+  .note b{display:block;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+
+  .flash{background:var(--surface-2);border-radius:18px;padding:24px 20px;text-align:center;font-family:'Unbounded',sans-serif;font-weight:500;font-size:16.5px;line-height:1.4;min-height:104px;display:flex;align-items:center;justify-content:center;animation:pop .25s ease;}
+  @keyframes pop{from{transform:translateY(8px);opacity:.3}to{transform:none;opacity:1}}
+  .choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:14px;}
+  .choices .opt{text-align:center;font-weight:800;padding:15px 10px;}
+  .count{font-size:12.5px;color:var(--soft);font-weight:700;margin-bottom:10px;}
+
+  .slots{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+  .slot{display:flex;gap:12px;align-items:center;min-height:46px;padding:9px 14px;border-radius:12px;border:1.5px dashed var(--line);font-size:14.5px;font-weight:600;}
+  .slot.filled{border-style:solid;border-color:var(--dc);background:color-mix(in srgb,var(--dc) 10%,var(--surface));}
+  .slot em{font-style:normal;font-weight:800;color:var(--dc);width:20px;flex:none;}
+  .steps{display:flex;flex-direction:column;gap:8px;}
+  .step{padding:11px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-size:14.5px;text-align:left;cursor:pointer;font-weight:600;}
+  .step:hover{border-color:var(--dc);}
+  .step.used{opacity:.3;pointer-events:none;}
+  .picks{font-size:12.5px;color:var(--soft);font-weight:700;margin-bottom:10px;}
+
+  /* results */
+  .stack > * + *{margin-top:16px;}
+  .res-head h1{font-size:clamp(24px,6vw,36px);line-height:1.1;margin:8px 0 10px;}
+  .res-head p{color:var(--soft);margin:0;font-size:15.5px;line-height:1.55;}
+  .badge{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:8px 16px;border-radius:99px;background:var(--accent);color:var(--accent-ink);font-weight:800;font-size:14px;}
+  .radar{display:block;width:100%;max-width:400px;margin:6px auto 0;}
+  .radar text{fill:var(--ink);font-family:'Nunito Sans',sans-serif;font-size:11.5px;font-weight:800;}
+  .radar .grid{fill:none;stroke:var(--line);stroke-width:1;}
+  .radar .axis{stroke:var(--line);stroke-width:1;}
+  .radar .shape{fill:color-mix(in srgb,var(--accent) 24%,transparent);stroke:var(--accent);stroke-width:2.5;stroke-linejoin:round;}
+  .bars{display:flex;flex-direction:column;gap:14px;margin-top:18px;}
+  .bar-top{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;font-weight:800;margin-bottom:6px;gap:10px;}
+  .bar-top span{font-size:12px;color:var(--dc);flex:none;}
+  .track{height:10px;border-radius:99px;background:var(--surface-2);overflow:hidden;}
+  .fill{height:100%;border-radius:99px;background:var(--dc);width:0;transition:width .9s cubic-bezier(.2,.8,.2,1);}
+  .coach{display:flex;gap:14px;align-items:center;margin-bottom:6px;}
+  .coach h2{font-size:18px;line-height:1.2;}
+  .coach p{margin:2px 0 0;color:var(--soft);font-size:13.5px;}
+  .letter{margin-top:16px;padding:18px;border-radius:16px;background:var(--accent-soft);font-size:15.5px;line-height:1.6;}
+  .letter strong{display:block;font-family:'Unbounded',sans-serif;font-size:16px;margin-bottom:6px;}
+  .tips{display:flex;flex-direction:column;gap:12px;margin-top:14px;}
+  .tip{border-radius:14px;padding:14px 16px;border:1px solid var(--line);border-left:5px solid var(--dc);background:var(--surface);}
+  .tip small{display:block;font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--dc);margin-bottom:5px;}
+  .tip p{margin:0;font-size:14.5px;line-height:1.55;}
+  .quote{margin:18px 0 0;padding:0 0 0 14px;border-left:3px solid var(--accent);font-style:italic;color:var(--soft);font-size:14px;line-height:1.55;}
+  .frase{font-size:15px;line-height:2.1;}
+  .frase input{display:inline-block;width:min(100%,230px);padding:6px 10px;border-radius:8px;border:none;border-bottom:2.5px solid var(--accent);background:var(--surface-2);color:var(--ink);font-size:15px;font-family:inherit;font-weight:700;}
+  .frase input:focus{outline:2px solid var(--accent);outline-offset:1px;}
+
+  .commit-fb{margin-top:20px;border-radius:18px;padding:22px 20px;text-align:center;background:var(--accent-soft);border:1px solid var(--line);animation:pop .3s ease;}
+  .cf-emoji{font-size:52px;line-height:1;margin-bottom:6px;}
+  .commit-fb h3{font-size:19px;}
+  .commit-fb p{margin:8px auto 0;max-width:50ch;font-size:14.5px;line-height:1.55;}
+  .gift{font-size:50px;line-height:1;background:none;border:none;cursor:pointer;padding:6px;animation:wiggle 1.4s ease-in-out infinite;margin-top:10px;}
+  .gift:disabled{animation:none;cursor:default;}
+  @keyframes wiggle{0%,100%{transform:rotate(0)}15%{transform:rotate(-10deg)}30%{transform:rotate(9deg)}45%{transform:rotate(-6deg)}60%{transform:rotate(0)}}
+  .gift-cap{font-size:12.5px;font-weight:800;color:var(--soft);}
+  .prize{margin-top:8px;background:var(--surface);border:1.5px dashed var(--accent);border-radius:14px;padding:14px 16px;font-size:14.5px;line-height:1.55;font-weight:700;animation:pop .3s ease;}
+  #party{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50;}
+  .pf{position:absolute;top:-60px;animation-name:fall;animation-timing-function:ease-in;animation-fill-mode:forwards;}
+  @keyframes fall{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--dx),110vh) rotate(540deg);opacity:.9}}
+
+  @media (max-width:480px){
+    .card{padding:20px 16px;border-radius:16px;}
+    .q{font-size:17px;}
+    .node{width:22px;height:22px;font-size:9px;}
+    .pillars{grid-template-columns:1fr;}
+    .coachbox{flex-direction:column;}
+  }
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+</style>
+
+<div class="wrap">
+
+  <section id="s-start" class="hero">
+    <div class="brand"><b>i3</b> Instituto i3 · Gestión Documental</div>
+    <div class="eyebrow">Juego de análisis</div>
+    <h1>Analista de <span>archivo.</span></h1>
+
+    <div class="coachbox">
+      <div class="avatar">CG</div>
+      <div>
+        <div class="who">Coach Camilo Gallego</div>
+        <div class="role">Docente de Gestión Documental · Instituto i3</div>
+        <p>¡Bienvenido al Archivo i3! Hoy no vas a recitar definiciones: vas a analizar casos de un archivo real, detectar qué falla y decidir como lo haría un profesional.</p>
+        <p>Nos guía una idea: <strong>organizar bien hoy para encontrar mañana.</strong> Cuando termines, te daré consejos según cómo analizaste cada caso.</p>
+      </div>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar"><b>ORDEN</b><span>Aplicar un método coherente y mantener el orden original.</span></div>
+      <div class="pillar"><b>CUIDADO</b><span>Proteger los documentos físicos y digitales desde su creación.</span></div>
+      <div class="pillar"><b>CONTROL</b><span>Eliminar solo con autorización y trazabilidad.</span></div>
+    </div>
+
+    <div class="eyebrow" style="margin-top:26px;display:block;">Tu misión: 10 hallazgos</div>
+    <div class="mission" id="mission"></div>
+
+    <div class="field">
+      <label for="in-name">Tu nombre (opcional)</label>
+      <input id="in-name" type="text" autocomplete="given-name" placeholder="Para personalizar tu informe">
+    </div>
+    <div class="row"><button class="btn btn-primary" id="b-start">Aceptar el caso</button></div>
+  </section>
+
+  <section id="s-quiz" hidden>
+    <div class="top">
+      <div class="top-row"><span id="q-count">Hallazgo 1 de 10</span><span>Coach Camilo Gallego</span></div>
+      <div class="trail" id="trail"></div>
+    </div>
+    <div class="card" id="qcard"></div>
+  </section>
+
+  <section id="s-res" hidden class="stack"></section>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var TOPICS = {
+    ord:{name:"Ordenación documental", short:"Ordenación"},
+    val:{name:"Valor de la organización", short:"Valor"},
+    eli:{name:"Eliminación documental", short:"Eliminación"},
+    cfis:{name:"Conservación física", short:"Cons. física"},
+    cdig:{name:"Conservación digital", short:"Cons. digital"}
+  };
+  var TORDER = ["ord","val","eli","cfis","cdig"];
+
+  var Q = [
+    {t:"cards", k:"ord", stage:"Ordenación", game:"Elige el método", scene:"Primer recorrido del archivo: cada carpeta usa un criterio distinto. Tu trabajo es reconocer cuál.",
+     q:"¿Qué método de ordenación describe cada situación?",
+     labels:["Cronológica","Alfabética","Geográfica","Topográfica"],
+     c:[{s:"05 ene. → 12 ene. → 28 ene.", a:0},
+        {s:"Acosta → García → Rojas", a:1},
+        {s:"Bogotá → Cali → Medellín", a:2},
+        {s:"Módulo 2 / Estante 1 / Caja 5", a:3},
+        {s:"Las cartas se archivan según su fecha de recepción", a:0},
+        {s:"Los expedientes de clientes van por razón social", a:1}],
+     note:"Elige el criterio según la información que necesitas recuperar: fecha (cronológica), nombres o razón social (alfabética), territorio o sede (geográfica) y estante, módulo o caja (topográfica)."},
+
+    {t:"case", k:"ord", stage:"Ordenación · Caso", scene:"En el archivo de Talento Humano, la serie «Historias laborales» (código GH-02) está ordenada por fecha en una caja, por apellido en otra y por color de carpeta en una tercera.",
+     q:"¿Cuál es el problema principal?",
+     o:[["Que no hay suficientes estantes.",0],
+        ["Que se mezclan métodos de ordenación sin una regla: falta usar un criterio coherente con la serie y el trámite.",2],
+        ["Que las historias laborales deberían ordenarse por color.",0],
+        ["Que lo importante es ordenar rápido, no importa el método.",1]],
+     note:"Usa el criterio coherente con la serie y el trámite; no mezcles métodos sin regla. Consistencia antes que rapidez."},
+
+    {t:"pick", k:"ord", stage:"Ordenación · Auditoría", game:"Marca los 3 problemas", scene:"Bitácora de la auditoría al archivo. Algunos hallazgos son problemas y otros son buenas prácticas.",
+     q:"Marca los 3 hallazgos que son problemas.", n:3,
+     o:[["Cada serie usa un criterio de ordenación coherente con su trámite",0],
+        ["Un expediente fue reordenado por tamaño de hoja y se perdió la secuencia del trámite",1],
+        ["Los expedientes se identifican con un número único, como EXP-2026-014",0],
+        ["Nadie puede reconocer faltantes, duplicados ni movimientos de documentos",1],
+        ["Se combinan criterios (fecha y apellido) en la misma serie sin ninguna regla definida",1],
+        ["Se conserva la secuencia natural en que se desarrolló el trámite",0]],
+     note:"La ordenación dispone los documentos en una secuencia lógica, con un criterio definido y respetando el orden en que se desarrolló el trámite. Así se recupera rápido, se controlan faltantes y duplicados y se conserva el orden original."},
+
+    {t:"cards", k:"val", stage:"Valor del archivo", game:"Relaciona", scene:"El gerente pregunta: «¿para qué sirve tanto orden?». Tienes que mostrarle el valor con casos concretos.",
+     q:"¿Qué beneficio de la organización archivística muestra cada caso?",
+     labels:["Auditoría","Servicio","Memoria","Eficiencia"],
+     c:[{s:"Un ente de control pide evidencias y están disponibles y trazables", a:0},
+        {s:"Un usuario recibe respuesta oportuna a su solicitud", a:1},
+        {s:"Años después se consultan las decisiones y antecedentes de un proyecto", a:2},
+        {s:"Se ahorra tiempo buscando papeles y se libera espacio", a:3}],
+     note:"La organización apoya la auditoría, la transparencia, el servicio, la memoria institucional, el cumplimiento y la eficiencia."},
+
+    {t:"order", k:"eli", stage:"Eliminación · Proceso", game:"Ordena el procedimiento", scene:"Hay una serie cuyo tiempo de retención ya se cumplió y su disposición final es eliminación. Antes de destruir nada, hay que seguir un procedimiento.",
+     q:"Ordena los pasos para eliminar documentos de forma controlada.",
+     steps:["Verificar en la TRD/TVD que se cumplieron los tiempos de retención","Confirmar que no tienen valores que justifiquen conservarlos","Obtener la autorización de la instancia competente","Destruir con un método adecuado, protegiendo la confidencialidad","Registrar la eliminación: alcance, fecha y responsable"],
+     note:"La eliminación debe tener autorización, registro, confidencialidad y trazabilidad: aplicar TRD/TVD y verificar requisitos antes de destruir. Este orden resume esos criterios del procedimiento."},
+
+    {t:"case", k:"eli", stage:"Eliminación · Física", scene:"Se autorizó eliminar 40 cajas de contratos que incluyen datos personales. Alguien propone sacarlas a la basura del edificio para ganar espacio hoy.",
+     q:"¿Qué decisión tomas?",
+     o:[["Aceptar: la basura es lo más rápido y barato.",0],
+        ["Destruir con un método controlado, como trituración o desintegración, y documentar la eliminación.",2],
+        ["Venderlas directamente como papel reciclable.",1],
+        ["Quemarlas en el patio, sin trámite adicional.",0]],
+     note:"No basta con botar papel a la basura: primero se debe proteger la información y documentar la eliminación. El reciclaje solo es seguro si la información no puede reconstruirse, y la incineración solo si está autorizada."},
+
+    {t:"case", k:"eli", stage:"Eliminación · Digital", scene:"Un portátil con expedientes electrónicos ya autorizados para eliminar va a ser entregado a otra dependencia. Un compañero lo vacía: manda todo a la papelera y la vacía.",
+     q:"¿Es suficiente? ¿Qué corresponde hacer?",
+     o:[["Sí, vaciar la papelera elimina los archivos para siempre.",0],
+        ["Sí, y además formatear rápido para dejarlo limpio.",0],
+        ["No: aplicar borrado seguro o sanitización adecuada al tipo de soporte y dejar registro de alcance, autorización, fecha y responsable.",2],
+        ["Entregarlo así: la información ya es «invisible».",0]],
+     note:"Mover a la papelera o formatear rápidamente no garantiza un borrado seguro. Si el medio no puede sanitizarse de forma confiable, la opción es destruir el dispositivo; en todos los casos se deja control y evidencia."},
+
+    {t:"pick", k:"cfis", stage:"Conservación física", game:"Encuentra los 3 riesgos", scene:"Recorrido por el depósito del archivo central. Revisa lo que ves.",
+     q:"Marca los 3 riesgos para los documentos en papel.", n:3,
+     o:[["Cajas apoyadas en el piso, junto a una tubería con filtraciones",1],
+        ["Un termohigrómetro registra temperatura y humedad, y se limpian las estanterías con regularidad",0],
+        ["Ganchos metálicos y cinta adhesiva en varios expedientes",1],
+        ["Carpetas y cajas adecuadas para archivo",0],
+        ["La luz del sol da directo sobre los folios de una estantería junto a la ventana",1],
+        ["Existe un plan de respuesta ante agua, fuego y otros riesgos",0]],
+     note:"Prevenir es mejor que reparar: controla temperatura, humedad, luz y polvo; usa unidades de conservación adecuadas; evita ganchos y cintas; y vigila hongos, insectos, roedores y filtraciones."},
+
+    {t:"cards", k:"cdig", stage:"Conservación digital", game:"¿Buena práctica o riesgo?", scene:"Último hallazgo: el repositorio digital del archivo. Evalúa cada práctica.",
+     q:"¿Cada práctica protege los documentos electrónicos o los pone en riesgo?",
+     labels:["Buena práctica","Riesgo"],
+     c:[{s:"Copias de seguridad en ubicaciones separadas, con pruebas de restauración", a:0},
+        {s:"Subir todo a la nube y dar el tema por resuelto, sin política de respaldo", a:1},
+        {s:"Permisos de acceso según funciones y necesidad de uso", a:0},
+        {s:"Mantener un formato antiguo sin plan de migración", a:1},
+        {s:"Verificar la integridad de los archivos con controles técnicos", a:0},
+        {s:"Usar el mismo usuario y clave para todo el equipo", a:1}],
+     note:"La conservación digital busca documentos accesibles, íntegros, auténticos y utilizables en el tiempo. La nube no reemplaza una política de conservación, respaldo y control."},
+
+    {t:"case", k:null, stage:"Tu informe final", scene:"Terminaste el recorrido. Es momento de mirar hacia adentro, como analista.",
+     q:"¿Qué decisión te cuesta más tomar como analista de archivo?",
+     o:[["Elegir el método de ordenación correcto para cada serie",0,"ord"],
+        ["Decidir cuándo y cómo eliminar con seguridad",0,"eli"],
+        ["Proteger bien los documentos físicos",0,"cfis"],
+        ["Proteger bien los documentos digitales",0,"cdig"]],
+     note:"Ordenar, eliminar y preservar se entrenan con casos y práctica. Nombrar lo que más te cuesta es el primer paso para dominarlo."}
+  ];
+  var TOTAL = Q.length;
+
+  var MAXT = {};
+  TORDER.forEach(function(k){ MAXT[k]=0; });
+  Q.forEach(function(q){ if(q.k) MAXT[q.k] += 2; });
+
+  var TIPS = {
+    ord:{
+      low:["Ordenar es elegir el criterio según lo que necesitas recuperar. Haz una tarjeta con los métodos y un ejemplo de cada uno: cronológica, numérica, alfanumérica, consecutiva, alfabética, por asuntos, geográfica, mixta, topográfica, por código de clasificación y por número de expediente.",
+           "Ante una serie desordenada, pregúntate dos cosas: ¿qué criterio es coherente con su trámite? y ¿se está respetando el orden en que se desarrolló? Consistencia antes que rapidez."],
+      high:["Eliges y mantienes el orden con criterio. Sigue defendiendo el orden original cuando alguien quiera «acomodar» un expediente para que se vea más bonito."]},
+    val:{
+      low:["Cuando alguien dude del archivo, muéstrale el valor con casos: auditorías con evidencias disponibles, respuestas oportunas a usuarios, memoria de decisiones y ahorro de tiempo y espacio."],
+      high:["Sabes explicar para qué sirve el orden. Esa es la mejor forma de que tu entidad apoye el trabajo del archivo."]},
+    eli:{
+      low:["Antes de destruir, repasa cuatro palabras: autorización, registro, confidencialidad y trazabilidad. Si falta una, todavía no es momento de eliminar.",
+           "Recuerda que botar papel a la basura no es eliminar, y que la papelera o el formateo rápido no garantizan un borrado seguro. Protege primero la información y documenta después."],
+      high:["Eliminas con método y evidencia. Mantén siempre el registro de lo que se destruye: es lo que te respalda ante una auditoría."]},
+    cfis:{
+      low:["Haz un recorrido de 10 minutos por tu depósito (o por tu casa, si estudias en casa) y busca cinco cosas: humedad, luz directa, polvo, ganchos o cintas metálicas y señales de plagas o filtraciones.",
+           "Prevenir es mejor que reparar: unidades de conservación adecuadas, manos limpias, no doblar ni rasgar, y un plan para emergencias de agua o fuego."],
+      high:["Detectas los riesgos del depósito antes de que dañen los documentos. Llévalo a un hábito: una revisión periódica con lista de chequeo."]},
+    cdig:{
+      low:["Revisa tu propia información digital: ¿tienes copias de seguridad en otra ubicación y has probado restaurarlas? Un respaldo que nunca se probó no es una garantía.",
+           "Piensa en la conservación digital como cuatro cuidados: copias, accesos controlados, integridad verificada y formatos que se migran antes de volverse obsoletos."],
+      high:["Cuidas lo digital con criterio. Recuerda que la nube no reemplaza una política de conservación, respaldo y control."]}
+  };
+  var FOCUS_TIPS = {
+    ord:"Practica con un caso real: toma diez documentos cualquiera y ordénalos de dos formas distintas. Luego decide cuál criterio recupera mejor la información y por qué.",
+    eli:"Haz una lista con los cinco pasos del procedimiento de eliminación y revísala cada vez que escuches «ya podemos botar esas cajas». Un paso saltado es una decisión sin respaldo.",
+    cfis:"Elige un depósito (real o imaginado) y elabora una lista de chequeo con ambiente, materiales, limpieza, manipulación, plagas y emergencias. Los seis frentes de la conservación física.",
+    cdig:"Anota qué documentos digitales importantes tienes y dónde están sus copias. Si hay uno sin respaldo en otra ubicación, empieza por ese."
+  };
+  var FOCUS_LABEL = {ord:"Elegir el método de ordenación", eli:"Eliminar con seguridad", cfis:"Proteger lo físico", cdig:"Proteger lo digital"};
+
+  var TIERS = {
+    high:{badge:"🏆 Analista de confianza",
+          title:"qué informe tan sólido",
+          text:"Analizaste cada caso con criterio: viste qué falla, entendiste por qué y decidiste como lo haría un profesional. Eso es lo que hace valioso a quien trabaja en un archivo. Ahora lleva ese ojo a situaciones reales y no pierdas la curiosidad. Organizar bien hoy es lo que permite encontrar mañana."},
+    mid:{badge:"🧭 Analista en formación",
+         title:"vas por muy buen camino",
+         text:"Detectaste varios hallazgos importantes y otros se te escaparon, y así es como se entrena el ojo de un analista. Elige un tema para reforzar esta semana y practícalo con un caso real. Cada diagnóstico que haces te hace más preciso. Sigue adelante, aquí estoy para acompañarte."},
+    low:{badge:"🌱 Analista en entrenamiento",
+         title:"este es solo el comienzo",
+         text:"Terminaste los diez hallazgos, y analizar es justamente lo más difícil de este oficio. Hoy tu informe es un punto de partida, no un veredicto: los temas donde más dudaste son los que más rápido van a mejorar con práctica. Vuelve a las diapositivas y recorre el archivo otra vez. Yo creo en tu proceso."}
+  };
+
+  var st;
+  function resetState(){
+    st = {idx:0, pts:{}, focus:null, name:""};
+    TORDER.forEach(function(k){ st.pts[k]=0; });
+  }
+  resetState();
+
+  var $ = function(id){ return document.getElementById(id); };
+  var sStart=$('s-start'), sQuiz=$('s-quiz'), sRes=$('s-res'), card=$('qcard');
+
+  function show(el){ [sStart,sQuiz,sRes].forEach(function(s){ s.hidden = s!==el; }); window.scrollTo({top:0, behavior:'auto'}); }
+  function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function el(tag, cls, text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!==undefined) e.textContent=text; return e; }
+
+  (function(){
+    var m = $('mission');
+    Q.forEach(function(q,i){
+      var d = el('div','k-'+(q.k||'none'));
+      d.appendChild(el('i',null,String(i+1)));
+      d.appendChild(document.createTextNode(q.stage));
+      d.appendChild(el('span',null,q.game || 'Caso'));
+      m.appendChild(d);
+    });
+  })();
+
+  $('b-start').addEventListener('click', function(){
+    resetState(); st.name = $('in-name').value.trim();
+    show(sQuiz); render();
+  });
+
+  function buildTrail(){
+    var box = $('trail'); box.innerHTML = '';
+    var bar = el('div','fillbar'); bar.style.width = (st.idx/(TOTAL-1))*90 + '%'; box.appendChild(bar);
+    for(var i=0;i<TOTAL;i++){
+      box.appendChild(el('span','node' + (i<st.idx?' done':(i===st.idx?' now':'')), i<st.idx ? '✓' : String(i+1)));
+    }
+  }
+
+  function render(){
+    var q = Q[st.idx];
+    $('q-count').textContent = 'Hallazgo ' + (st.idx+1) + ' de ' + TOTAL;
+    buildTrail();
+    card.innerHTML = ''; card.className = 'card k-' + (q.k||'none');
+    var tr = el('div','tagrow');
+    var dt = el('span','dtag'); dt.appendChild(el('i')); dt.appendChild(document.createTextNode(q.stage)); tr.appendChild(dt);
+    if(q.game) tr.appendChild(el('span','gtag','Juego · ' + q.game));
+    card.appendChild(tr);
+    if(q.scene){ var sc = el('div','scene'); sc.appendChild(el('b',null,'Caso')); sc.appendChild(document.createTextNode(q.scene)); card.appendChild(sc); }
+    card.appendChild(el('h2','q',q.q));
+    var area = el('div'); card.appendChild(area);
+    ({case:caseUI, cards:cardsUI, order:orderUI, pick:pickUI})[q.t](q, area);
+  }
+
+  function award(q, pts){
+    if(q.k) st.pts[q.k] += pts;
+    var n = el('div','note'); n.appendChild(el('b',null,'Clave del coach')); n.appendChild(document.createTextNode(q.note));
+    card.appendChild(n);
+    var row = el('div','row end'); var last = st.idx===TOTAL-1;
+    var b = el('button','btn btn-primary', last ? 'Ver mi informe' : 'Siguiente hallazgo');
+    b.addEventListener('click', function(){ if(last){ finish(); } else { st.idx++; render(); } });
+    row.appendChild(b); card.appendChild(row);
+    b.focus({preventScroll:true});
+    n.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  function caseUI(q, area){
+    var box = el('div','opts'); area.appendChild(box);
+    shuffle(q.o).forEach(function(opt){
+      var b = el('button','opt',opt[0]);
+      b.addEventListener('click', function(){
+        Array.prototype.forEach.call(box.children, function(x){ x.disabled = true; });
+        b.classList.add('picked');
+        if(opt[2]) st.focus = opt[2];
+        award(q, opt[1]);
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function pickUI(q, area){
+    var info = el('div','picks'); area.appendChild(info);
+    var box = el('div','opts'); area.appendChild(box);
+    var sel = [];
+    var row = el('div','row end');
+    var confirm = el('button','btn btn-primary'); row.appendChild(confirm); area.appendChild(row);
+    function upd(){
+      info.textContent = 'Marcados: ' + sel.length + ' de ' + q.n;
+      confirm.disabled = sel.length !== q.n;
+      confirm.textContent = 'Confirmar mi análisis';
+    }
+    shuffle(q.o).forEach(function(opt){
+      var b = el('button','opt hall');
+      var bx = el('span','box'); b.appendChild(bx); b.appendChild(el('span',null,opt[0]));
+      b.addEventListener('click', function(){
+        var p = sel.indexOf(opt);
+        if(p !== -1){ sel.splice(p,1); b.classList.remove('picked'); bx.textContent=''; }
+        else if(sel.length < q.n){ sel.push(opt); b.classList.add('picked'); bx.textContent='✓'; }
+        upd();
+      });
+      box.appendChild(b);
+    });
+    confirm.addEventListener('click', function(){
+      var good = sel.reduce(function(a,o){ return a + o[1]; }, 0);
+      Array.prototype.forEach.call(box.children, function(x){ x.disabled = true; });
+      row.remove(); info.remove();
+      award(q, good === q.n ? 2 : (good === q.n-1 ? 1 : 0));
+    });
+    upd();
+  }
+
+  function cardsUI(q, area){
+    var i = 0, ok = 0;
+    var count = el('div','count'), deck = el('div'), btns = el('div','choices');
+    area.appendChild(count); area.appendChild(deck); area.appendChild(btns);
+    var order = shuffle(q.c);
+    function showCard(){
+      var c = order[i];
+      count.textContent = 'Tarjeta ' + (i+1) + ' de ' + order.length;
+      deck.innerHTML = ''; deck.appendChild(el('div','flash',c.s));
+      btns.innerHTML = '';
+      q.labels.forEach(function(txt,k){
+        var b = el('button','opt',txt);
+        b.addEventListener('click', function(){
+          if(k===c.a) ok++;
+          b.classList.add('picked');
+          Array.prototype.forEach.call(btns.children, function(x){ x.disabled = true; });
+          setTimeout(function(){
+            i++;
+            if(i<order.length) showCard();
+            else { count.textContent = 'Tarjetas completadas'; deck.innerHTML=''; btns.innerHTML=''; award(q, Math.round(2*ok/order.length)); }
+          }, 280);
+        });
+        btns.appendChild(b);
+      });
+    }
+    showCard();
+  }
+
+  function orderUI(q, area){
+    var slots = el('div','slots'), stepsBox = el('div','steps'), ctl = el('div','row');
+    area.appendChild(slots); area.appendChild(stepsBox); area.appendChild(ctl);
+    var placed = [];
+    var shuffled = shuffle(q.steps.map(function(s,i){ return i; }));
+    if(shuffled.every(function(v,i){ return v===i; })) shuffled.reverse();
+    var undo = el('button','btn btn-ghost','Deshacer');
+    var confirm = el('button','btn btn-primary','Confirmar orden');
+    ctl.appendChild(undo); ctl.appendChild(confirm);
+    function draw(){
+      slots.innerHTML = '';
+      q.steps.forEach(function(s,k){
+        var sl = el('div','slot' + (placed[k]!==undefined?' filled':''));
+        sl.appendChild(el('em',null,String(k+1)));
+        sl.appendChild(document.createTextNode(placed[k]!==undefined ? q.steps[placed[k]] : ''));
+        slots.appendChild(sl);
+      });
+      stepsBox.innerHTML = '';
+      shuffled.forEach(function(idx){
+        var b = el('button','step' + (placed.indexOf(idx)!==-1?' used':''), q.steps[idx]);
+        b.addEventListener('click', function(){ placed.push(idx); draw(); });
+        stepsBox.appendChild(b);
+      });
+      undo.disabled = placed.length===0;
+      confirm.disabled = placed.length!==q.steps.length;
+    }
+    undo.addEventListener('click', function(){ placed.pop(); draw(); });
+    confirm.addEventListener('click', function(){
+      var right = placed.filter(function(v,k){ return v===k; }).length;
+      var pts = right===q.steps.length ? 2 : (right>=Math.ceil(q.steps.length/2) ? 1 : 0);
+      ctl.remove(); stepsBox.remove(); award(q, pts);
+    });
+    draw();
+  }
+
+  var PARTY = ['🎉','🎈','🎁','🥳','🎊','✨','🚀','🏆','💥','🌟'];
+  function party(big){
+    var old = document.getElementById('party'); if(old) old.remove();
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var box = el('div'); box.id='party'; box.setAttribute('aria-hidden','true');
+    var n = big ? 46 : 22;
+    for(var i=0;i<n;i++){
+      var s = el('span','pf', PARTY[Math.floor(Math.random()*PARTY.length)]);
+      s.style.left=(Math.random()*100)+'vw'; s.style.fontSize=(22+Math.random()*26)+'px';
+      s.style.animationDuration=(2.6+Math.random()*2.4)+'s'; s.style.animationDelay=(Math.random()*0.9)+'s';
+      s.style.setProperty('--dx',(Math.random()*160-80)+'px');
+      box.appendChild(s);
+    }
+    document.body.appendChild(box);
+    setTimeout(function(){ box.remove(); }, 6200);
+  }
+
+  function pct(k){ return MAXT[k] ? st.pts[k]/MAXT[k] : 0; }
+
+  function radarSVG(labels, vals, ariaLabel){
+    var NS='http://www.w3.org/2000/svg', cx=200, cy=150, R=90, n=labels.length;
+    var svg=document.createElementNS(NS,'svg');
+    svg.setAttribute('viewBox','0 0 400 300'); svg.setAttribute('class','radar'); svg.setAttribute('role','img'); svg.setAttribute('aria-label',ariaLabel);
+    function pt(i,r){ var a=-Math.PI/2+i*2*Math.PI/n; return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; }
+    [0.25,0.5,0.75,1].forEach(function(f){
+      var g=document.createElementNS(NS,'polygon');
+      g.setAttribute('points', labels.map(function(_,i){ return pt(i,R*f).join(','); }).join(' ')); g.setAttribute('class','grid'); svg.appendChild(g);
+    });
+    labels.forEach(function(_,i){
+      var p=pt(i,R), l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',cx); l.setAttribute('y1',cy); l.setAttribute('x2',p[0]); l.setAttribute('y2',p[1]); l.setAttribute('class','axis'); svg.appendChild(l);
+    });
+    var shape=document.createElementNS(NS,'polygon');
+    shape.setAttribute('points', vals.map(function(v,i){ return pt(i,R*Math.max(0.06,v)).join(','); }).join(' ')); shape.setAttribute('class','shape'); svg.appendChild(shape);
+    labels.forEach(function(lab,i){
+      var p=pt(i,R+22), t=document.createElementNS(NS,'text');
+      t.setAttribute('x',p[0]); t.setAttribute('y',p[1]+4);
+      t.setAttribute('text-anchor', p[0]<cx-5?'end':(p[0]>cx+5?'start':'middle')); t.textContent=lab; svg.appendChild(t);
+      var q=pt(i,R*Math.max(0.06,vals[i])), d=document.createElementNS(NS,'circle');
+      d.setAttribute('cx',q[0]); d.setAttribute('cy',q[1]); d.setAttribute('r',4); d.setAttribute('fill','var(--accent)'); svg.appendChild(d);
+    });
+    return svg;
+  }
+
+  function tipEl(kcls, label, text){
+    var t = el('div','tip '+kcls); t.appendChild(el('small',null,label)); t.appendChild(el('p',null,text)); return t;
+  }
+
+  function finish(){
+    sRes.innerHTML = '';
+    var ranked = TORDER.slice().sort(function(a,b){ return pct(a)-pct(b); });
+    var weakest = ranked[0], second = ranked[1], strongest = ranked[ranked.length-1];
+    var total = TORDER.reduce(function(a,k){ return a+st.pts[k]; },0);
+    var max = TORDER.reduce(function(a,k){ return a+MAXT[k]; },0);
+    var overall = total/max;
+    var tier = overall>=0.75 ? 'high' : (overall>=0.45 ? 'mid' : 'low');
+    var T = TIERS[tier];
+    var nm = st.name;
+
+    var c1 = el('div','card');
+    var head = el('div','res-head');
+    head.appendChild(el('div','eyebrow','Informe del analista · Instituto i3'));
+    head.appendChild(el('h1',null,(nm ? nm + ', cerraste' : 'Cerraste') + ' los 10 hallazgos.'));
+    head.appendChild(el('p',null,'Donde mejor analizaste fue ' + TOPICS[strongest].name.toLowerCase() + ' y donde más puedes entrenar es ' + TOPICS[weakest].name.toLowerCase() + '. Este es tu mapa.'));
+    head.appendChild(el('div','badge',T.badge));
+    c1.appendChild(head);
+    c1.appendChild(radarSVG(TORDER.map(function(k){ return TOPICS[k].short; }), TORDER.map(pct), 'Gráfico de radar con tu nivel en los cinco temas'));
+    var bars = el('div','bars');
+    TORDER.forEach(function(k){
+      var p = pct(k), w = el('div','k-'+k);
+      var top = el('div','bar-top'); top.appendChild(document.createTextNode(TOPICS[k].name));
+      top.appendChild(el('span',null,Math.round(p*100) + '%'));
+      var tr = el('div','track'), f = el('div','fill'); tr.appendChild(f); w.appendChild(top); w.appendChild(tr); bars.appendChild(w);
+      f.dataset.w = Math.round(p*100);
+    });
+    c1.appendChild(bars);
+    sRes.appendChild(c1);
+
+    var c3 = el('div','card');
+    var coach = el('div','coach');
+    coach.appendChild(el('div','avatar','CG'));
+    var ct = el('div'); ct.appendChild(el('h2',null,'Consejos del coach Camilo Gallego')); ct.appendChild(el('p',null,'Según cómo analizaste cada caso.')); coach.appendChild(ct);
+    c3.appendChild(coach);
+    var letter = el('div','letter');
+    letter.appendChild(el('strong',null,'¡' + (nm ? nm + ', ' : '') + T.title + '!'));
+    letter.appendChild(document.createTextNode(T.text));
+    c3.appendChild(letter);
+
+    var tips = el('div','tips');
+    TIPS[weakest].low.forEach(function(tx,i){ tips.appendChild(tipEl('k-'+weakest, (i===0?'Entrena primero · ':'')+TOPICS[weakest].name, tx)); });
+    if(pct(second) < 0.75 && second !== weakest){
+      tips.appendChild(tipEl('k-'+second,'Después · '+TOPICS[second].name, TIPS[second].low[0]));
+    }
+    if(pct(strongest) >= 0.5){
+      tips.appendChild(tipEl('k-'+strongest,'Tu fortaleza · '+TOPICS[strongest].name, TIPS[strongest].high[0]));
+    }
+    if(st.focus) tips.appendChild(tipEl('k-none','La decisión que más te cuesta · '+FOCUS_LABEL[st.focus], FOCUS_TIPS[st.focus]));
+    c3.appendChild(tips);
+    c3.appendChild(el('p','quote','“Organizar bien hoy para encontrar mañana.” — Coach Camilo Gallego'));
+    sRes.appendChild(c3);
+
+    var c4 = el('div','card');
+    c4.appendChild(el('h2',null,'Tu compromiso como analista'));
+    var fr = el('div','frase'); fr.style.marginTop='12px';
+    fr.appendChild(document.createTextNode('“Esta semana voy a revisar '));
+    var i1 = document.createElement('input'); i1.id='f1'; i1.type='text'; i1.placeholder='un aspecto del archivo'; i1.setAttribute('aria-label','Qué voy a revisar');
+    fr.appendChild(i1);
+    fr.appendChild(document.createTextNode(' en '));
+    var i2 = document.createElement('input'); i2.id='f2'; i2.type='text'; i2.placeholder='un lugar o caso real'; i2.setAttribute('aria-label','Dónde lo voy a revisar');
+    fr.appendChild(i2);
+    fr.appendChild(document.createTextNode(' para cuidar el orden, la conservación y el control de los documentos”.'));
+    c4.appendChild(fr);
+    var row = el('div','row');
+    var go = el('button','btn btn-primary','🎉 Sellar mi compromiso');
+    var again = el('button','btn btn-ghost','Volver a analizar el archivo');
+    again.addEventListener('click', function(){ resetState(); show(sStart); });
+    row.appendChild(go); row.appendChild(again); c4.appendChild(row);
+    var fb = el('div','commit-fb'); fb.hidden = true; fb.setAttribute('aria-live','polite'); c4.appendChild(fb);
+    go.addEventListener('click', function(){
+      var a = i1.value.trim(), b = i2.value.trim();
+      fb.hidden = false; fb.innerHTML = '';
+      if(a.length < 3 || b.length < 3){
+        fb.appendChild(el('div','cf-emoji','✍️'));
+        fb.appendChild(el('h3',null,'Completa las dos partes'));
+        fb.appendChild(el('p',null,'Escribe qué vas a revisar y dónde. Sé concreto: algo pequeño y posible.'));
+        return;
+      }
+      fb.appendChild(el('div','cf-emoji','🥳'));
+      fb.appendChild(el('h3',null,'¡' + (nm ? nm + ', compromiso' : 'Compromiso') + ' sellado!'));
+      fb.appendChild(el('p',null,'Revisar «' + a + '» en «' + b + '» es justo lo que hace un buen analista: mirar con método y decidir con evidencia. Toma una captura de pantalla para recordarlo.'));
+      var gift = el('button','gift','🎁'); gift.setAttribute('aria-label','Abrir el regalo del coach');
+      var cap = el('div','gift-cap','Toca el regalo: hay una sorpresa del coach');
+      var prize = el('div','prize'); prize.hidden = true;
+      gift.addEventListener('click', function(){
+        gift.disabled = true; gift.textContent='🎊'; cap.textContent='Regalo del coach Camilo';
+        prize.textContent='🚀 Dedica 20 minutos hoy a revisar «' + a + '» en «' + b + '» y anota un hallazgo. Lo pequeño, repetido, se vuelve oficio. ¡Tú puedes!';
+        prize.hidden=false; party(true);
+      });
+      fb.appendChild(gift); fb.appendChild(cap); fb.appendChild(prize);
+      party(false);
+      fb.scrollIntoView({behavior:'smooth', block:'center'});
+    });
+    sRes.appendChild(c4);
+
+    show(sRes);
+    party(overall>=0.75);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      Array.prototype.forEach.call(sRes.querySelectorAll('.fill'), function(f){ f.style.width = f.dataset.w + '%'; });
+    });});
+  }
+})();
+</script>
